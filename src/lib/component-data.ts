@@ -342,12 +342,27 @@ export const SmartBreadcrumb = ({ items, onNavigate, className }: SmartBreadcrum
         code: `import { useState, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { useNexus } from '../lib/nexus-provider';
-import { Search, Home, Settings, Layout } from 'lucide-react';
+import { Search, ArrowRight } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const TeleportSearch = () => {
+// Data Structures
+export interface SearchItem {
+    id: string;
+    label: string;
+    icon: LucideIcon;
+    shortcut?: string;
+    action: () => void;
+}
+
+export interface SearchGroup {
+    heading: string;
+    items: SearchItem[];
+}
+
+export const TeleportSearch = ({ searchGroups }: { searchGroups: SearchGroup[] }) => {
     const [open, setOpen] = useState(false);
-    const { toggleTheme, emit, on } = useNexus();
+    const { on } = useNexus();
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -358,8 +373,6 @@ export const TeleportSearch = () => {
         };
 
         document.addEventListener('keydown', down);
-
-        // Listen for global open event
         const cleanup = on('command-palette:open', () => setOpen(true));
 
         return () => {
@@ -368,16 +381,15 @@ export const TeleportSearch = () => {
         };
     }, [on]);
 
-    const runCommand = (command: () => void) => {
+    const runCommand = (action: () => void) => {
         setOpen(false);
-        command();
+        action();
     };
 
     return (
         <AnimatePresence>
             {open && (
                 <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[20vh] px-4">
-                    {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -386,7 +398,6 @@ export const TeleportSearch = () => {
                         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                     />
 
-                    {/* Dialog */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95, y: -20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -406,32 +417,25 @@ export const TeleportSearch = () => {
                             <Command.List className="max-h-[300px] overflow-y-auto overflow-x-hidden p-2">
                                 <Command.Empty className="py-6 text-center text-sm text-gray-500">No results found.</Command.Empty>
 
-                                <Command.Group heading="Navigation" className="text-xs font-medium text-gray-400 px-2 py-1.5 mb-2">
-                                    <Command.Item
-                                        onSelect={() => runCommand(() => emit('navigate', 'home'))}
-                                        className="relative flex cursor-default select-none items-center rounded-lg px-2 py-2 text-sm text-gray-200 outline-none hover:bg-white/10 aria-selected:bg-white/10 aria-selected:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                                    >
-                                        <Home className="mr-2 h-4 w-4" />
-                                        <span>Home</span>
-                                    </Command.Item>
-                                    <Command.Item
-                                        onSelect={() => runCommand(() => emit('navigate', 'components'))}
-                                        className="relative flex cursor-default select-none items-center rounded-lg px-2 py-2 text-sm text-gray-200 outline-none hover:bg-white/10 aria-selected:bg-white/10 aria-selected:text-white"
-                                    >
-                                        <Layout className="mr-2 h-4 w-4" />
-                                        <span>Components</span>
-                                    </Command.Item>
-                                </Command.Group>
-
-                                <Command.Group heading="Settings" className="text-xs font-medium text-gray-400 px-2 py-1.5 mb-2">
-                                    <Command.Item
-                                        onSelect={() => runCommand(() => toggleTheme())}
-                                        className="relative flex cursor-default select-none items-center rounded-lg px-2 py-2 text-sm text-gray-200 outline-none hover:bg-white/10 aria-selected:bg-white/10 aria-selected:text-white"
-                                    >
-                                        <Settings className="mr-2 h-4 w-4" />
-                                        <span>Toggle Theme</span>
-                                    </Command.Item>
-                                </Command.Group>
+                                {searchGroups.map((group) => (
+                                    <Command.Group key={group.heading} heading={group.heading} className="text-xs font-medium text-gray-400 px-2 py-1.5 mb-2">
+                                        {group.items.map((item) => (
+                                            <Command.Item
+                                                key={item.id}
+                                                onSelect={() => runCommand(item.action)}
+                                                value={\`\${ group.heading } \${ item.label }\`}
+                                                className="relative flex cursor-default select-none items-center rounded-lg px-2 py-2 text-sm text-gray-200 outline-none hover:bg-white/10 aria-selected:bg-white/10 aria-selected:text-white"
+                                            >
+                                                <item.icon className="mr-2 h-4 w-4 opacity-70" />
+                                                <span className="flex-1">{item.label}</span>
+                                                {item.shortcut && (
+                                                    <span className="text-[10px] text-gray-500 font-mono border border-white/10 rounded px-1 bg-white/5">{item.shortcut}</span>
+                                                )}
+                                                <ArrowRight className="ml-2 h-3 w-3 opacity-0 aria-selected:opacity-50 transition-opacity" />
+                                            </Command.Item>
+                                        ))}
+                                    </Command.Group>
+                                ))}
                             </Command.List>
                         </Command>
                     </motion.div>
@@ -441,5 +445,205 @@ export const TeleportSearch = () => {
     );
 };`,
         usage: `<TeleportSearch />`
+    },
+    'x-ray-reveal': {
+        id: 'x-ray-reveal',
+        name: 'X-Ray Reveal',
+        description: 'A magical effect where a cursor-guided mask reveals hidden content layer underneath.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge',
+        code: `import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
+import { cn } from '../lib/utils';
+
+interface XRayRevealProps {
+    children: React.ReactNode;
+    revealContent: React.ReactNode;
+    className?: string;
+    radius?: number;
+    gradientSize?: number;
+}
+
+export const XRayReveal = ({
+    children,
+    revealContent,
+    className,
+    radius = 100,
+    gradientSize = 50
+}: XRayRevealProps) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    
+    // Animation state for the reveal effect (0 = hidden/no hole, 1 = revealed/hole open)
+    const transitionVal = useSpring(0, { stiffness: 400, damping: 30 });
+
+    const innerRadius = useTransform(transitionVal, [0, 1], [0, radius * (gradientSize / 100)]);
+    const outerRadius = useTransform(transitionVal, [0, 1], [0, radius]);
+
+    // Construct the mask image dynamically based on mouse position and transition state
+    const maskImage = useMotionTemplate\`radial-gradient(circle at \${x}px \${y}px, transparent \${innerRadius}px, black \${outerRadius}px)\`;
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        x.set(e.clientX - rect.left);
+        y.set(e.clientY - rect.top);
+    };
+
+    return (
+        <div
+            ref={ref}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => transitionVal.set(1)}
+            onMouseLeave={() => transitionVal.set(0)}
+            className={cn("relative overflow-hidden cursor-crosshair", className)}
+        >
+            {/* Base Layer (Hidden Content) */}
+            <div className="absolute inset-0 z-0">
+                {revealContent}
+            </div>
+
+            {/* Overlay Layer (Main Content) */}
+            <motion.div
+                className="relative z-10 w-full h-full bg-surface-light dark:bg-surface-dark"
+                style={{
+                    maskImage,
+                    WebkitMaskImage: maskImage,
+                    // Use standard no-repeat to prevent tiling of the gradient
+                    maskRepeat: "no-repeat",
+                    WebkitMaskRepeat: "no-repeat",
+                }}
+            >
+                {children}
+            </motion.div>
+        </div>
+    );
+};`,
+        usage: `import { XRayReveal } from '@/components/XRayReveal';
+import { Skull, AlertTriangle, Lock } from 'lucide-react';
+
+export const SecretDossier = () => (
+    <XRayReveal
+        className="w-full h-96 rounded-xl border border-white/10"
+        radius={120}
+        revealContent={
+            <div className="w-full h-full bg-red-900/20 flex flex-col items-center justify-center text-red-500 p-8 text-center">
+                <Skull className="w-16 h-16 mb-4 animate-pulse" />
+                <h2 className="text-3xl font-black uppercase tracking-widest mb-2">Top Secret</h2>
+                <p className="font-mono text-sm max-w-md">
+                    CLASSIFIED INFORMATION: The payload has been delivered. 
+                    Meeting point coordinates: 34.0522° N, 118.2437° W
+                </p>
+                <div className="mt-8 grid grid-cols-3 gap-4 w-full max-w-md opacity-50">
+                     {[...Array(6)].map((_, i) => (
+                        <div key={i} className="h-12 bg-red-500/10 rounded border border-red-500/20" />
+                     ))}
+                </div>
+            </div>
+        }
+    >
+        <div className="w-full h-full bg-gray-900 flex flex-col items-center justify-center text-gray-400 p-8 text-center group">
+            <Lock className="w-16 h-16 mb-4 group-hover:text-gray-200 transition-colors" />
+            <h2 className="text-3xl font-bold mb-2 text-gray-200">Restricted Access</h2>
+            <p className="max-w-md">
+                This document is classified. Authorization level 4 required to view contents.
+            </p>
+            <div className="mt-8 flex items-center gap-2 text-sm text-yellow-500 border border-yellow-500/20 bg-yellow-500/5 px-4 py-2 rounded-full">
+                <AlertTriangle className="w-4 h-4" />
+                <span>Hover to decouple security layer</span>
+            </div>
+        </div>
+    </XRayReveal>
+);`
+    },
+    'magnetic-button': {
+        id: 'magnetic-button',
+        name: 'Magnetic Button',
+        description: 'A button that physically attracts to your cursor when you get close.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge',
+        code: `import React, { useRef } from 'react';
+import { motion, useSpring } from 'framer-motion';
+import { cn } from '../lib/utils';
+
+interface MagneticButtonProps {
+    children: React.ReactNode;
+    className?: string;
+    strength?: number; // How far the button moves (default 0.5)
+    range?: number; // How close the mouse needs to be (default 100)
+    onClick?: () => void;
+}
+
+export const MagneticButton = ({ 
+    children, 
+    className, 
+    strength = 0.5, 
+    range = 100,
+    onClick
+}: MagneticButtonProps) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    // Spring physics for smooth movement
+    const x = useSpring(0, { stiffness: 150, damping: 15, mass: 0.1 });
+    const y = useSpring(0, { stiffness: 150, damping: 15, mass: 0.1 });
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!ref.current) return;
+
+        const rect = ref.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const distanceX = e.clientX - centerX;
+        const distanceY = e.clientY - centerY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        if (distance < range) {
+            // Move button towards the mouse
+            x.set(distanceX * strength);
+            y.set(distanceY * strength);
+        } else {
+            // Reset if out of range
+            x.set(0);
+            y.set(0);
+        }
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
+
+    return (
+        <motion.div
+            ref={ref}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ x, y }}
+            onClick={onClick}
+            className={cn(
+                "inline-block cursor-pointer transition-colors duration-200", 
+                className
+            )}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+        >
+            {children}
+        </motion.div>
+    );
+};`,
+        usage: `import { MagneticButton } from '@/components/MagneticButton';
+import { MousePointer2 } from 'lucide-react';
+
+export const MagneticCTA = () => (
+    <div className="flex gap-8 items-center justify-center p-12">
+        <MagneticButton strength={0.2} className="p-4 bg-gray-800 rounded-full border border-gray-700 hover:border-gray-500">
+             <MousePointer2 className="w-6 h-6 text-white" />
+        </MagneticButton>
+        
+        <MagneticButton strength={0.6} range={150} className="px-8 py-3 bg-accent text-white rounded-xl font-bold hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] transition-shadow">
+             Strong Pull
+        </MagneticButton>
+    </div>
+);`
     }
 };

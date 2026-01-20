@@ -1,16 +1,20 @@
+
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Dock, DockIcon } from '../components/InteractiveDock';
 import { GlassCard } from '../components/GlassCard';
 import { SmartBreadcrumb } from '../components/SmartBreadcrumb';
-import { Home, Search, Calendar, Folder, MessageSquare, ArrowLeft, Zap, Settings } from 'lucide-react';
+import { XRayReveal } from '../components/XRayReveal';
+import { MagneticButton } from '../components/MagneticButton';
+import { Home, Search, Calendar, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2 } from 'lucide-react';
 import { COMPONENTS } from '../lib/component-data';
 import { CodeBlock } from '../components/CodeBlock';
+import { cn } from '../lib/utils';
 
 export const ComponentPage = () => {
     const { ignore } = useParams();
     const navigate = useNavigate();
-    const activeId = ignore || 'glass-card'; // Default to glass-card
+    const activeId = ignore || 'glass-card';
     const component = COMPONENTS[activeId];
 
     const [activeTab, setActiveTab] = useState('preview');
@@ -23,159 +27,281 @@ export const ComponentPage = () => {
         }
     }, [component, navigate]);
 
-
     if (!component) return null;
 
+    const sections = [
+        { id: 'preview', label: 'Preview' },
+        { id: 'usage', label: 'Usage' },
+        { id: 'installation', label: 'Installation' },
+    ];
+
+    const scrollToSection = (id: string) => {
+        // Implement scrolling logic if needed, or just switch tabs for now since the content is tabbed
+        // Ideally Next.js docs are single page scroll, but here we have tabs.
+        // Let's stick to tabs but maybe "On this page" could link to headers within the active tab?
+        // For this version, let's keep the tabs concept but make "On this page" switch tabs or just link to subsections.
+        // Actually, to look like Next.js, it might be better if it wasn't tabs but vertical content.
+        // However, the prompt asked to "update" the existing page, which uses tabs.
+        // Let's keep tabs for Preview/Code to allow interactive playground, but maybe "Installation" could be below?
+        // Let's stick to the tabs for now as it's cleaner for a component library.
+        setActiveTab(id);
+    };
+
     return (
-        <div className="min-h-screen pt-24 px-8 pb-12 max-w-7xl mx-auto flex gap-12">
+        <div className="min-h-screen pt-24 pb-12">
+            <div className="max-w-[1440px] mx-auto flex gap-10 px-6 lg:px-8">
 
-            {/* Sidebar */}
-            <aside className="w-64 flex-shrink-0 sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto">
-                <Link
-                    to="/"
-                    className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors mb-8"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to Home
-                </Link>
-                <div className="space-y-1">
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 px-3">Components</h3>
-                    {Object.values(COMPONENTS).map((item) => (
+                {/* Left Sidebar - Navigation */}
+                <aside className="w-64 flex-shrink-0 hidden lg:block sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pr-4">
+                    <div className="mb-4">
                         <Link
-                            key={item.id}
-                            to={`/components/${item.id}`}
-                            onClick={() => setActiveTab('preview')}
-                            className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${activeId === item.id
-                                ? 'bg-white/10 text-white font-medium shadow-sm'
-                                : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
-                                }`}
+                            to="/"
+                            className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors"
                         >
-                            {item.name}
+                            <ArrowLeft className="w-4 h-4" />
+                            Back to Home
                         </Link>
-                    ))}
-                </div>
-            </aside>
+                    </div>
+                    <div className="space-y-6">
+                        <div>
+                            <h4 className="text-sm font-semibold text-white mb-3">Getting Started</h4>
+                            <ul className="space-y-1">
+                                <li>
+                                    <span className="text-sm text-gray-500 cursor-not-allowed">Introduction</span>
+                                </li>
+                                <li>
+                                    <span className="text-sm text-gray-500 cursor-not-allowed">Installation</span>
+                                </li>
+                            </ul>
+                        </div>
 
-            {/* Main Content */}
-            <main className="flex-1 min-w-0">
-                <div className="mb-8 space-y-4">
-                    <h1 className="text-4xl font-bold text-white tracking-tight">{component.name}</h1>
-                    <p className="text-lg text-gray-400">{component.description}</p>
-                </div>
+                        <div>
+                            <h4 className="text-sm font-semibold text-white mb-3">Components</h4>
+                            <ul className="space-y-1 border-l border-white/5">
+                                {Object.values(COMPONENTS).map((item) => (
+                                    <li key={item.id}>
+                                        <Link
+                                            to={`/components/${item.id}`}
+                                            onClick={() => setActiveTab('preview')}
+                                            className={cn(
+                                                "block text-sm py-1.5 pl-4 -ml-px border-l transition-colors",
+                                                activeId === item.id
+                                                    ? "border-accent text-accent font-medium"
+                                                    : "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-700"
+                                            )}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
 
-                {/* Tabs */}
-                <div className="flex items-center gap-1 border-b border-white/10 mb-8">
-                    {['Preview', 'Code', 'Installation'].map((tab) => (
-                        <button
-                            key={tab}
-                            onClick={() => setActiveTab(tab.toLowerCase())}
-                            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.toLowerCase()
-                                ? 'border-accent text-white'
-                                : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-700'
-                                }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                </div>
+                {/* Main Content */}
+                <main className="flex-1 min-w-0 max-w-3xl">
+                    <div className="mb-6">
+                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                            <span>Components</span>
+                            <ChevronRight className="w-4 h-4" />
+                            <span className="text-white font-medium">{component.name}</span>
+                        </div>
+                        <h1 className="text-4xl font-bold text-white tracking-tight mb-4">{component.name}</h1>
+                        <p className="text-lg text-gray-400 leading-relaxed">
+                            {component.description}
+                        </p>
+                    </div>
 
-                {/* Tab Content */}
-                <div className="animate-fade-in">
-                    {activeTab === 'preview' && (
-                        <div className="glass rounded-3xl p-12 min-h-[400px] flex items-center justify-center bg-gray-900/50 relative overflow-hidden perspective-1000">
-                            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                    {/* Tabs / Switcher */}
+                    <div className="flex items-center gap-6 border-b border-white/10 mb-8">
+                        {['Preview', 'Code', 'Installation'].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab.toLowerCase())}
+                                className={cn(
+                                    "pb-3 text-sm font-medium border-b-2 transition-colors relative top-[1px]",
+                                    activeTab === tab.toLowerCase()
+                                        ? "border-accent text-accent"
+                                        : "border-transparent text-gray-400 hover:text-gray-200"
+                                )}
+                            >
+                                {tab}
+                            </button>
+                        ))}
+                    </div>
 
-                            {/* Specific Render Logic based on ID */}
-                            {activeId === 'dock' && (
-                                <div className="mt-auto">
-                                    <Dock>
-                                        <DockIcon label="Home" isActive={activeDockApp === 'home'} onClick={() => setActiveDockApp('home')}><Home /></DockIcon>
-                                        <DockIcon label="Search" isActive={activeDockApp === 'search'} onClick={() => setActiveDockApp('search')}><Search /></DockIcon>
-                                        <DockIcon label="Calendar" isActive={activeDockApp === 'calendar'} onClick={() => setActiveDockApp('calendar')}><Calendar /></DockIcon>
-                                        <DockIcon label="Files" isActive={activeDockApp === 'files'} onClick={() => setActiveDockApp('files')}><Folder /></DockIcon>
-                                        <DockIcon label="Messages" isActive={activeDockApp === 'messages'} onClick={() => setActiveDockApp('messages')}><MessageSquare /></DockIcon>
-                                    </Dock>
+                    <div className="animate-fade-in">
+                        {/* Preview Tab */}
+                        {activeTab === 'preview' && (
+                            <div className="space-y-8">
+                                <div className="rounded-xl border border-white/10 bg-[#0A0A0A] overflow-hidden min-h-[400px] flex items-center justify-center relative bg-[radial-gradient(#1f1f1f_1px,transparent_1px)] bg-[size:20px_20px]">
+
+                                    {/* Specific Render Logic */}
+                                    {activeId === 'dock' && (
+                                        <div className="mt-auto pb-10">
+                                            <Dock>
+                                                <DockIcon label="Home" isActive={activeDockApp === 'home'} onClick={() => setActiveDockApp('home')}><Home /></DockIcon>
+                                                <DockIcon label="Search" isActive={activeDockApp === 'search'} onClick={() => setActiveDockApp('search')}><Search /></DockIcon>
+                                                <DockIcon label="Calendar" isActive={activeDockApp === 'calendar'} onClick={() => setActiveDockApp('calendar')}><Calendar /></DockIcon>
+                                                <DockIcon label="Files" isActive={activeDockApp === 'files'} onClick={() => setActiveDockApp('files')}><Folder /></DockIcon>
+                                                <DockIcon label="Messages" isActive={activeDockApp === 'messages'} onClick={() => setActiveDockApp('messages')}><MessageSquare /></DockIcon>
+                                            </Dock>
+                                        </div>
+                                    )}
+
+                                    {activeId === 'glass-card' && (
+                                        <GlassCard className="w-[340px] h-auto p-8 flex flex-col justify-between">
+                                            <div className="flex flex-col gap-6">
+                                                <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center text-accent border border-accent/10 shadow-[0_0_20px_-5px_rgba(139,92,246,0.3)]">
+                                                    <Zap className="w-7 h-7" />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <h3 className="text-3xl font-bold text-white tracking-tight">Pro Plan</h3>
+                                                    <p className="text-base text-gray-400 leading-relaxed max-w-[90%]">Unlock full access to Nexus UI components and premium support.</p>
+                                                </div>
+                                            </div>
+                                            <button className="w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 active:scale-95 border border-white/10 text-white font-semibold transition-all shadow-lg hover:shadow-xl hover:border-white/20 mt-3">
+                                                Get Started
+                                            </button>
+                                        </GlassCard>
+                                    )}
+
+                                    {activeId === 'breadcrumb' && (
+                                        <div className="mt-[-60px]">
+                                            <SmartBreadcrumb
+                                                items={[
+                                                    { id: 'home', label: 'Home', icon: <Home className="w-3 h-3" /> },
+                                                    {
+                                                        id: 'products',
+                                                        label: 'Products',
+                                                        children: [
+                                                            { id: 'analytics', label: 'Analytics' },
+                                                            { id: 'commerce', label: 'Commerce' },
+                                                        ]
+                                                    },
+                                                    { id: 'settings', label: 'Settings', icon: <Settings className="w-3 h-3" /> },
+                                                ]}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {activeId === 'teleport' && (
+                                        <div className="text-center">
+                                            <p className="text-gray-400 mb-4">Press <kbd className="bg-white/10 px-2 py-1 rounded text-white border border-white/10 text-xs">Cmd+K</kbd> to open</p>
+                                            <button onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))} className="px-4 py-2 bg-accent/10 text-accent rounded-lg border border-accent/20 hover:bg-accent/20 transition-colors">
+                                                Open Palette
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {activeId === 'magnetic-button' && (
+                                        <div className="flex gap-8 items-center justify-center h-full pb-10">
+                                            <MagneticButton strength={0.4} className="p-4 bg-gray-800 rounded-full border border-gray-700 hover:border-gray-500">
+                                                <MousePointer2 className="w-8 h-8 text-white" />
+                                            </MagneticButton>
+
+                                            <MagneticButton strength={0.8} range={150} className="px-8 py-4 bg-accent text-white rounded-xl font-bold hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] transition-shadow">
+                                                Strong Pull
+                                            </MagneticButton>
+                                        </div>
+                                    )}
+
+                                    {activeId === 'x-ray-reveal' && (
+                                        <div className="p-8 w-full max-w-3xl">
+                                            <XRayReveal
+                                                className="w-full h-96 rounded-xl border border-white/10"
+                                                radius={120}
+                                                revealContent={
+                                                    <div className="w-full h-full bg-red-900/20 flex flex-col items-center justify-center text-red-500 p-8 text-center">
+                                                        <Skull className="w-16 h-16 mb-4 animate-pulse" />
+                                                        <h2 className="text-3xl font-black uppercase tracking-widest mb-2">Top Secret</h2>
+                                                        <p className="font-mono text-sm max-w-md">
+                                                            CLASSIFIED INFORMATION: The payload has been delivered.
+                                                            Meeting point coordinates: 34.0522° N, 118.2437° W
+                                                        </p>
+                                                        <div className="mt-8 grid grid-cols-3 gap-4 w-full max-w-md opacity-50">
+                                                            {[...Array(6)].map((_, i) => (
+                                                                <div key={i} className="h-12 bg-red-500/10 rounded border border-red-500/20" />
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                }
+                                            >
+                                                <div className="w-full h-full bg-gray-900 flex flex-col items-center justify-center text-gray-400 p-8 text-center group">
+                                                    <Lock className="w-16 h-16 mb-4 group-hover:text-gray-200 transition-colors" />
+                                                    <h2 className="text-3xl font-bold mb-2 text-gray-200">Restricted Access</h2>
+                                                    <p className="max-w-md">
+                                                        This document is classified. Authorization level 4 required to view contents.
+                                                    </p>
+                                                    <div className="mt-8 flex items-center gap-2 text-sm text-yellow-500 border border-yellow-500/20 bg-yellow-500/5 px-4 py-2 rounded-full">
+                                                        <AlertTriangle className="w-4 h-4" />
+                                                        <span>Hover to decouple security layer</span>
+                                                    </div>
+                                                </div>
+                                            </XRayReveal>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
+                        )}
 
-                            {activeId === 'glass-card' && (
-                                <GlassCard className="w-[340px] h-auto p-8 flex flex-col justify-between">
-                                    <div className="flex flex-col gap-6">
-                                        <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center text-accent border border-accent/10 shadow-[0_0_20px_-5px_rgba(139,92,246,0.3)]">
-                                            <Zap className="w-7 h-7" />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <h3 className="text-3xl font-bold text-white tracking-tight">Pro Plan</h3>
-                                            <p className="text-base text-gray-400 leading-relaxed max-w-[90%]">Unlock full access to Nexus UI components and premium support.</p>
-                                        </div>
-                                    </div>
-                                    <button className="w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 active:scale-95 border border-white/10 text-white font-semibold transition-all shadow-lg hover:shadow-xl hover:border-white/20 mt-3">
-                                        Get Started
-                                    </button>
-                                </GlassCard>
-                            )}
+                        {/* Code Tab */}
+                        {activeTab === 'code' && (
+                            <div className="space-y-6">
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-semibold text-white">Usage</h3>
+                                    <CodeBlock code={component.usage} language="tsx" />
+                                </div>
+                            </div>
+                        )}
 
-                            {activeId === 'breadcrumb' && (
-                                <div className="mt-[-100px]">
-                                    <SmartBreadcrumb
-                                        items={[
-                                            { id: 'home', label: 'Home', icon: <Home className="w-3 h-3" /> },
-                                            {
-                                                id: 'products',
-                                                label: 'Products',
-                                                children: [
-                                                    { id: 'analytics', label: 'Analytics' },
-                                                    { id: 'commerce', label: 'Commerce' },
-                                                ]
-                                            },
-                                            { id: 'settings', label: 'Settings', icon: <Settings className="w-3 h-3" /> },
-                                        ]}
+                        {/* Installation Tab */}
+                        {activeTab === 'installation' && (
+                            <div className="space-y-8">
+                                <section className="space-y-4">
+                                    <h3 className="text-lg font-semibold text-white">1. Install Dependencies</h3>
+                                    <p className="text-gray-400 text-sm">run the following command in your terminal</p>
+                                    <CodeBlock code={component.dependencies} language="bash" />
+                                </section>
+
+                                <section className="space-y-4">
+                                    <h3 className="text-lg font-semibold text-white">2. Copy Source Code</h3>
+                                    <p className="text-gray-400 text-sm">Paste the code into your component file.</p>
+                                    <CodeBlock
+                                        code={component.code}
+                                        language="tsx"
+                                        maxHeight="600px"
+                                        showLineNumbers={true}
                                     />
-                                </div>
-                            )}
-
-                            {activeId === 'teleport' && (
-                                <div className="text-center">
-                                    <p className="text-gray-400 mb-4">Press <kbd className="bg-white/10 px-2 py-1 rounded text-white">Cmd+K</kbd> to open</p>
-                                    <button onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))} className="px-4 py-2 bg-accent/20 text-accent rounded-lg border border-accent/20">
-                                        Open Palette
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Usage Tab */}
-                    {activeTab === 'code' && (
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-white">Usage Example</h3>
-                            <CodeBlock code={component.usage} language="tsx" />
-                        </div>
-                    )}
-
-                    {/* Installation Tab */}
-                    {activeTab === 'installation' && (
-                        <div className="space-y-8 animate-fade-in">
-                            {/* Step 1: Dependencies */}
-                            <div className="space-y-4">
-                                <h3 className="text-lg font-semibold text-white">1. Install Dependencies</h3>
-                                <CodeBlock code={component.dependencies} language="bash" />
+                                </section>
                             </div>
+                        )}
 
-                            {/* Step 2: Source Code */}
-                            <div className="space-y-4">
-                                <h3 className="text-lg font-semibold text-white">2. Copy Source Code</h3>
-                                <CodeBlock
-                                    code={component.code}
-                                    language="tsx"
-                                    maxHeight="600px"
-                                    showLineNumbers={true}
-                                />
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </main>
+                    </div>
+                </main>
+
+                {/* Right Sidebar - On this page */}
+                <aside className="w-64 flex-shrink-0 hidden xl:block sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto">
+                    <h5 className="text-sm font-semibold text-white mb-4">On This Page</h5>
+                    <ul className="space-y-2 text-sm">
+                        {sections.map(section => (
+                            <li key={section.id}>
+                                <button
+                                    onClick={() => scrollToSection(section.id)}
+                                    className={cn(
+                                        "block text-left transition-colors hover:text-white",
+                                        activeTab === section.id ? "text-accent" : "text-gray-500 p"
+                                    )}
+                                >
+                                    {section.label}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </aside>
+
+            </div>
         </div>
     );
 };
