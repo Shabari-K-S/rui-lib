@@ -5,6 +5,7 @@ export interface ComponentData {
     dependencies: string; // npm install command
     code: string; // The source code
     usage: string; // Usage example
+    category?: 'Components' | 'Backgrounds';
 }
 
 export const COMPONENTS: Record<string, ComponentData> = {
@@ -13,6 +14,7 @@ export const COMPONENTS: Record<string, ComponentData> = {
         name: 'Glass Card',
         description: 'A high-fidelity glass surface with magnetic 3D tilt effect on hover.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Components',
         code: `import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -120,6 +122,7 @@ export const MyCard = () => (
         name: 'Interactive Dock',
         description: 'A macOS-inspired dock with magnification physics and glassmorphism.',
         dependencies: 'npm install framer-motion @radix-ui/react-tooltip clsx tailwind-merge',
+        category: 'Components',
         code: `import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { cn } from "../lib/utils";
@@ -247,6 +250,7 @@ export const MyDock = () => (
         name: 'Smart Breadcrumb',
         description: 'Context-aware navigation trail with dropdown menus.',
         dependencies: 'npm install @radix-ui/react-dropdown-menu clsx tailwind-merge lucide-react',
+        category: 'Components',
         code: `import { ChevronRight, ChevronDown, Folder } from 'lucide-react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { cn } from '../lib/utils';
@@ -339,6 +343,7 @@ export const SmartBreadcrumb = ({ items, onNavigate, className }: SmartBreadcrum
         name: 'Teleport Search',
         description: 'Global command palette for fast navigation and actions.',
         dependencies: 'npm install cmdk framer-motion lucide-react',
+        category: 'Components',
         code: `import { useState, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { useNexus } from '../lib/nexus-provider';
@@ -451,6 +456,7 @@ export const TeleportSearch = ({ searchGroups }: { searchGroups: SearchGroup[] }
         name: 'X-Ray Reveal',
         description: 'A magical effect where a cursor-guided mask reveals hidden content layer underneath.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Components',
         code: `import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -561,6 +567,7 @@ export const SecretDossier = () => (
         name: 'Magnetic Button',
         description: 'A button that physically attracts to your cursor when you get close.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Components',
         code: `import React, { useRef } from 'react';
 import { motion, useSpring } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -643,6 +650,288 @@ export const MagneticCTA = () => (
         <MagneticButton strength={0.6} range={150} className="px-8 py-3 bg-accent text-white rounded-xl font-bold hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] transition-shadow">
              Strong Pull
         </MagneticButton>
+    </div>
+);`
+    },
+    'cyber-grid': {
+        id: 'cyber-grid',
+        name: 'Cyber Grid',
+        description: 'A futuristic grid background with pulsing digital blocks, perfect for landing pages or dashboards.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Backgrounds',
+        code: `import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { cn } from '../lib/utils';
+
+export const AnimatedWall = ({ className }: { className?: string }) => {
+    // block interface
+    interface Block {
+        id: number;
+        x: number;
+        y: number;
+        duration: number;
+        delay: number;
+    }
+    const [blocks, setBlocks] = useState<Block[]>([]);
+
+    useEffect(() => {
+        // Create a grid of "active" blocks
+        const newBlocks: Block[] = [];
+        // Use window dimensions but fallback to large defaults if ssr/too early
+        const cols = 50; 
+        const rows = 30;
+        
+        // Add more active blocks for better visibility
+        // 5% of grid is active
+        const numBlocks = Math.floor((cols * rows) * 0.05); 
+
+        for (let i = 0; i < numBlocks; i++) {
+            newBlocks.push({
+                id: i,
+                x: Math.floor(Math.random() * cols),
+                y: Math.floor(Math.random() * rows),
+                duration: 2 + Math.random() * 4, // varied duration
+                delay: Math.random() * 5,
+            });
+        }
+        setBlocks(newBlocks);
+    }, []);
+
+    return (
+        <div className={cn("fixed inset-0 z-0 overflow-hidden pointer-events-none", className)}>
+            {/* Base Grid - Increased Opacity for visibility */}
+            <div 
+                className="absolute inset-0 opacity-[0.2]" 
+                style={{ 
+                    backgroundImage: \`linear-gradient(to right, #808080 1px, transparent 1px), linear-gradient(to bottom, #808080 1px, transparent 1px)\`,
+                    backgroundSize: '4rem 4rem' 
+                }} 
+            />
+
+            {/* Glowing Orbs / Active Cells */}
+            {blocks.map((block) => (
+                <motion.div
+                    key={block.id}
+                    className="absolute bg-accent/20 border border-accent/40 shadow-[0_0_20px_rgba(139,92,246,0.5)] backdrop-blur-[1px]"
+                    style={{
+                        left: \`\${block.x * 4}rem\`, 
+                        top: \`\${block.y * 4}rem\`,
+                        width: '3.9rem',
+                        height: '3.9rem',
+                    }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ 
+                        opacity: [0, 0.8, 0], 
+                        scale: [0.9, 1.1, 0.9],
+                    }}
+                    transition={{
+                        duration: block.duration,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        delay: block.delay,
+                        ease: "easeInOut"
+                    }}
+                />
+            ))}
+            
+             {/* Vignette - Reduced strength */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.4)_100%)]" />
+        </div>
+    );
+};`,
+        usage: `import { AnimatedWall } from '@/components/AnimatedWall';
+
+export const MyLandingPage = () => (
+    <div className="relative w-full h-screen bg-black">
+        <AnimatedWall />
+        
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
+            <h1 className="text-6xl font-bold mb-4">The Future is Here</h1>
+            <button className="px-8 py-4 bg-white text-black rounded-lg font-bold">
+                Get Started
+            </button>
+        </div>
+    </div>
+);`
+    },
+    'aurora-background': {
+        id: 'aurora-background',
+        name: 'Aurora Background',
+        description: 'A mesmerizing, flowing gradient background resembling the northern lights.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Backgrounds',
+        code: `import { motion } from 'framer-motion';
+import { cn } from '../lib/utils';
+
+export const AuroraBackground = ({ className, children }: { className?: string; children?: React.ReactNode }) => {
+    return (
+        <div className={cn("relative w-full h-full overflow-hidden bg-black", className)}>
+            <div className="absolute inset-0">
+                <motion.div
+                    className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] opacity-50 blur-[100px]"
+                    animate={{
+                        rotate: [0, 360],
+                    }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }}
+                    style={{
+                        background: 'conic-gradient(from 0deg, transparent 0deg, #8B5CF6 90deg, transparent 180deg, #3B82F6 270deg, transparent 360deg)',
+                    }}
+                />
+                <motion.div
+                    className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] opacity-30 blur-[80px]"
+                    animate={{
+                        rotate: [360, 0],
+                        scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                        duration: 30,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }}
+                    style={{
+                        background: 'radial-gradient(circle, rgba(99,102,241,0.8) 0%, transparent 60%)',
+                    }}
+                />
+            </div>
+            
+            <div className="relative z-10 w-full h-full">
+                {children}
+            </div>
+        </div>
+    );
+};`,
+        usage: `import { AuroraBackground } from '@/components/AuroraBackground';
+
+export const LoginPage = () => (
+    <div className="h-screen w-full">
+        <AuroraBackground>
+             <div className="flex items-center justify-center h-full">
+                 <h1 className="text-white text-4xl">Login</h1>
+             </div>
+        </AuroraBackground>
+    </div>
+);`
+    },
+    'particles-background': {
+        id: 'particles-background',
+        name: 'Particles Network',
+        description: 'An interactive neural network of connected particles.',
+        dependencies: 'npm install clsx tailwind-merge',
+        category: 'Backgrounds',
+        code: `import { useEffect, useRef } from 'react';
+import { cn } from '../lib/utils';
+
+interface ParticlesBackgroundProps {
+    className?: string;
+    particleCount?: number;
+    connectDistance?: number;
+    color?: string;
+}
+
+export const ParticlesBackground = ({ 
+    className, 
+    particleCount = 100, 
+    connectDistance = 100,
+    color = '#8B5CF6'
+}: ParticlesBackgroundProps) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let width = canvas.width = canvas.parentElement?.clientWidth || window.innerWidth;
+        let height = canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
+
+        const particles: { x: number; y: number; dx: number; dy: number }[] = [];
+
+        // Resize handler
+        const handleResize = () => {
+             width = canvas.width = canvas.parentElement?.clientWidth || window.innerWidth;
+             height = canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
+        };
+        window.addEventListener('resize', handleResize);
+
+        // Initialize particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                dx: (Math.random() - 0.5) * 0.5,
+                dy: (Math.random() - 0.5) * 0.5,
+            });
+        }
+
+        const animate = () => {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Update and draw particles
+            particles.forEach((p, i) => {
+                p.x += p.dx;
+                p.y += p.dy;
+
+                // Bounce off edges
+                if (p.x < 0 || p.x > width) p.dx *= -1;
+                if (p.y < 0 || p.y > height) p.dy *= -1;
+
+                // Draw particle
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+
+                // Connect particles
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = color;
+                        ctx.globalAlpha = 1 - (dist / connectDistance);
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            });
+
+            requestAnimationFrame(animate);
+        };
+
+        animate();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [particleCount, connectDistance, color]);
+
+    return (
+        <canvas 
+            ref={canvasRef} 
+            className={cn("absolute inset-0 pointer-events-none", className)}
+        />
+    );
+};`,
+        usage: `import { ParticlesBackground } from '@/components/ParticlesBackground';
+
+export const HeroSection = () => (
+    <div className="relative h-[400px] w-full bg-gray-900 overflow-hidden">
+        <ParticlesBackground particleCount={50} color="#8B5CF6" />
+        <div className="relative z-10 flex items-center justify-center h-full text-white">
+            <h1>Connected World</h1>
+        </div>
     </div>
 );`
     }
