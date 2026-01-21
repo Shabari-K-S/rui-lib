@@ -13,6 +13,8 @@ import { cn } from '../lib/utils';
 import { AnimatedWall } from '../components/AnimatedWall';
 import { AuroraBackground } from '../components/AuroraBackground';
 import { ParticlesBackground } from '../components/ParticlesBackground';
+import { Menu, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export const ComponentPage = () => {
     const { ignore } = useParams();
@@ -22,6 +24,12 @@ export const ComponentPage = () => {
 
     const [activeTab, setActiveTab] = useState('preview');
     const [activeDockApp, setActiveDockApp] = useState('home');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    // Close mobile menu on navigation
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [activeId]);
 
     // If ID is invalid, redirect to default
     useEffect(() => {
@@ -52,10 +60,75 @@ export const ComponentPage = () => {
 
     return (
         <div className="h-screen pt-24 overflow-hidden relative">
-            <div className="max-w-[1440px] mx-auto flex gap-10 px-6 lg:px-8 h-full relative z-10">
+            {/* Mobile Navigation Drawer */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm lg:hidden"
+                        />
+                        {/* Drawer */}
+                        <motion.aside
+                            initial={{ x: '-100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '-100%' }}
+                            transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+                            className="fixed inset-y-0 left-0 z-[70] w-64 bg-[#0A0A0A] border-r border-white/10 p-6 lg:hidden overflow-y-auto scrollbar-hide"
+                        >
+                            <div className="flex items-center justify-between mb-8">
+                                <span className="text-sm font-semibold text-white">Navigation</span>
+                                <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-500 hover:text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                            <div className="space-y-6">
+                                <div>
+                                    <h4 className="text-sm font-semibold text-white mb-3">Getting Started</h4>
+                                    <ul className="space-y-1">
+                                        <li><span className="text-sm text-gray-500 cursor-not-allowed">Introduction</span></li>
+                                        <li><span className="text-sm text-gray-500 cursor-not-allowed">Installation</span></li>
+                                    </ul>
+                                </div>
+                                {['Components', 'Backgrounds'].map((category) => (
+                                    <div key={category}>
+                                        <h4 className="text-sm font-semibold text-white mb-3">{category}</h4>
+                                        <ul className="space-y-1 border-l border-white/5">
+                                            {Object.values(COMPONENTS)
+                                                .filter(c => (c.category || 'Components') === category)
+                                                .map((item) => (
+                                                    <li key={item.id}>
+                                                        <Link
+                                                            to={`/components/${item.id}`}
+                                                            onClick={() => setActiveTab('preview')}
+                                                            className={cn(
+                                                                "block text-sm py-1.5 pl-4 -ml-px border-l transition-colors",
+                                                                activeId === item.id
+                                                                    ? "border-accent text-accent font-medium"
+                                                                    : "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-700"
+                                                            )}
+                                                        >
+                                                            {item.name}
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.aside>
+                    </>
+                )}
+            </AnimatePresence>
+
+            <div className="max-w-[1440px] mx-auto flex gap-6 lg:gap-10 px-4 sm:px-6 lg:px-8 h-full relative z-10">
 
                 {/* Left Sidebar - Navigation */}
-                <aside className="w-64 flex-shrink-0 hidden lg:block h-full overflow-y-auto pr-4 pb-12">
+                <aside className="w-64 flex-shrink-0 hidden lg:block h-full overflow-y-auto pr-4 pb-12 scrollbar-hide">
                     <div className="mb-4">
                         <Link
                             to="/"
@@ -107,16 +180,27 @@ export const ComponentPage = () => {
                 </aside>
 
                 {/* Main Content */}
-                <main className="flex-1 min-w-0 h-full overflow-y-auto pb-12">
+                <main className="flex-1 min-w-0 h-full overflow-y-auto pb-12 scrollbar-hide">
                     <div className="max-w-3xl">
+                        {/* Mobile Components Header */}
+                        <div className="lg:hidden mb-6 flex items-center justify-between">
+                            <button
+                                onClick={() => setIsMobileMenuOpen(true)}
+                                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-white/5 -ml-3"
+                            >
+                                <Menu className="w-5 h-5" />
+                                <span className="text-sm font-medium">Menu</span>
+                            </button>
+                        </div>
+
                         <div className="mb-6">
                             <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
                                 <span>Components</span>
                                 <ChevronRight className="w-4 h-4" />
                                 <span className="text-white font-medium">{component.name}</span>
                             </div>
-                            <h1 className="text-4xl font-bold text-white tracking-tight mb-4">{component.name}</h1>
-                            <p className="text-lg text-gray-400 leading-relaxed">
+                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight mb-4">{component.name}</h1>
+                            <p className="text-base sm:text-lg text-gray-400 leading-relaxed">
                                 {component.description}
                             </p>
                         </div>
@@ -143,11 +227,11 @@ export const ComponentPage = () => {
                             {/* Preview Tab */}
                             {activeTab === 'preview' && (
                                 <div className="space-y-8">
-                                    <div className="rounded-xl border border-white/10 bg-[#0A0A0A] overflow-hidden min-h-[400px] flex items-center justify-center relative bg-[radial-gradient(#1f1f1f_1px,transparent_1px)] bg-[size:20px_20px]">
+                                    <div className="rounded-xl border border-white/10 bg-[#0A0A0A] overflow-hidden min-h-[300px] sm:min-h-[400px] flex items-center justify-center relative bg-[radial-gradient(#1f1f1f_1px,transparent_1px)] bg-[size:20px_20px]">
 
                                         {/* Specific Render Logic */}
                                         {activeId === 'dock' && (
-                                            <div className="mt-auto pb-10">
+                                            <div className="mt-auto pb-10 w-full overflow-x-auto px-4 flex justify-center scrollbar-hide">
                                                 <Dock>
                                                     <DockIcon label="Home" isActive={activeDockApp === 'home'} onClick={() => setActiveDockApp('home')}><Home /></DockIcon>
                                                     <DockIcon label="Search" isActive={activeDockApp === 'search'} onClick={() => setActiveDockApp('search')}><Search /></DockIcon>
@@ -159,7 +243,7 @@ export const ComponentPage = () => {
                                         )}
 
                                         {activeId === 'glass-card' && (
-                                            <GlassCard className="w-[340px] h-auto p-8 flex flex-col justify-between">
+                                            <GlassCard className="w-full max-w-[340px] h-auto p-8 flex flex-col justify-between">
                                                 <div className="flex flex-col gap-6">
                                                     <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center text-accent border border-accent/10 shadow-[0_0_20px_-5px_rgba(139,92,246,0.3)]">
                                                         <Zap className="w-7 h-7" />
@@ -176,7 +260,7 @@ export const ComponentPage = () => {
                                         )}
 
                                         {activeId === 'breadcrumb' && (
-                                            <div className="mt-[-60px]">
+                                            <div className="mt-[-60px] max-w-full overflow-x-auto px-4 scrollbar-hide">
                                                 <SmartBreadcrumb
                                                     items={[
                                                         { id: 'home', label: 'Home', icon: <Home className="w-3 h-3" /> },
@@ -204,7 +288,7 @@ export const ComponentPage = () => {
                                         )}
 
                                         {activeId === 'magnetic-button' && (
-                                            <div className="flex gap-8 items-center justify-center h-full pb-10">
+                                            <div className="flex flex-col sm:flex-row gap-8 items-center justify-center h-full pb-10">
                                                 <MagneticButton strength={0.4} className="p-4 bg-gray-800 rounded-full border border-gray-700 hover:border-gray-500">
                                                     <MousePointer2 className="w-8 h-8 text-white" />
                                                 </MagneticButton>
@@ -216,34 +300,34 @@ export const ComponentPage = () => {
                                         )}
 
                                         {activeId === 'x-ray-reveal' && (
-                                            <div className="p-8 w-full max-w-3xl">
+                                            <div className="p-4 sm:p-8 w-full max-w-3xl">
                                                 <XRayReveal
-                                                    className="w-full h-96 rounded-xl border border-white/10"
+                                                    className="w-full h-72 sm:h-96 rounded-xl border border-white/10"
                                                     radius={120}
                                                     revealContent={
-                                                        <div className="w-full h-full bg-red-900/20 flex flex-col items-center justify-center text-red-500 p-8 text-center">
-                                                            <Skull className="w-16 h-16 mb-4 animate-pulse" />
-                                                            <h2 className="text-3xl font-black uppercase tracking-widest mb-2">Top Secret</h2>
-                                                            <p className="font-mono text-sm max-w-md">
+                                                        <div className="w-full h-full bg-red-900/20 flex flex-col items-center justify-center text-red-500 p-4 sm:p-8 text-center">
+                                                            <Skull className="w-12 h-12 sm:w-16 sm:h-16 mb-4 animate-pulse" />
+                                                            <h2 className="text-xl sm:text-3xl font-black uppercase tracking-widest mb-2">Top Secret</h2>
+                                                            <p className="font-mono text-xs sm:text-sm max-w-md">
                                                                 CLASSIFIED INFORMATION: The payload has been delivered.
                                                                 Meeting point coordinates: 34.0522° N, 118.2437° W
                                                             </p>
-                                                            <div className="mt-8 grid grid-cols-3 gap-4 w-full max-w-md opacity-50">
+                                                            <div className="mt-4 sm:mt-8 grid grid-cols-3 gap-2 sm:gap-4 w-full max-w-md opacity-50">
                                                                 {[...Array(6)].map((_, i) => (
-                                                                    <div key={i} className="h-12 bg-red-500/10 rounded border border-red-500/20" />
+                                                                    <div key={i} className="h-8 sm:h-12 bg-red-500/10 rounded border border-red-500/20" />
                                                                 ))}
                                                             </div>
                                                         </div>
                                                     }
                                                 >
-                                                    <div className="w-full h-full bg-gray-900 flex flex-col items-center justify-center text-gray-400 p-8 text-center group">
-                                                        <Lock className="w-16 h-16 mb-4 group-hover:text-gray-200 transition-colors" />
-                                                        <h2 className="text-3xl font-bold mb-2 text-gray-200">Restricted Access</h2>
-                                                        <p className="max-w-md">
+                                                    <div className="w-full h-full bg-gray-900 flex flex-col items-center justify-center text-gray-400 p-4 sm:p-8 text-center group">
+                                                        <Lock className="w-12 h-12 sm:w-16 sm:h-16 mb-4 group-hover:text-gray-200 transition-colors" />
+                                                        <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-200">Restricted Access</h2>
+                                                        <p className="max-w-md text-sm sm:text-base">
                                                             This document is classified. Authorization level 4 required to view contents.
                                                         </p>
-                                                        <div className="mt-8 flex items-center gap-2 text-sm text-yellow-500 border border-yellow-500/20 bg-yellow-500/5 px-4 py-2 rounded-full">
-                                                            <AlertTriangle className="w-4 h-4" />
+                                                        <div className="mt-4 sm:mt-8 flex items-center gap-2 text-xs sm:text-sm text-yellow-500 border border-yellow-500/20 bg-yellow-500/5 px-3 sm:px-4 py-2 rounded-full">
+                                                            <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4" />
                                                             <span>Hover to decouple security layer</span>
                                                         </div>
                                                     </div>
@@ -252,32 +336,32 @@ export const ComponentPage = () => {
                                         )}
 
                                         {activeId === 'cyber-grid' && (
-                                            <div className="w-full h-[500px] relative overflow-hidden rounded-xl border border-white/10">
+                                            <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] relative overflow-hidden rounded-xl border border-white/10">
                                                 <AnimatedWall className="absolute!" />
-                                                <div className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none">
-                                                    <h2 className="text-4xl font-bold text-white mb-2 shadow-black drop-shadow-lg">Cyber Grid</h2>
-                                                    <p className="text-gray-300 shadow-black drop-shadow-md">The grid comes alive at your command.</p>
+                                                <div className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none p-4 text-center">
+                                                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 shadow-black drop-shadow-lg">Cyber Grid</h2>
+                                                    <p className="text-sm sm:text-base text-gray-300 shadow-black drop-shadow-md">The grid comes alive at your command.</p>
                                                 </div>
                                             </div>
                                         )}
 
                                         {activeId === 'aurora-background' && (
-                                            <div className="w-full h-[500px] relative overflow-hidden rounded-xl border border-white/10">
+                                            <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] relative overflow-hidden rounded-xl border border-white/10">
                                                 <AuroraBackground>
-                                                    <div className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none">
-                                                        <h2 className="text-4xl font-bold text-white mb-2 mix-blend-overlay">Aurora Borealis</h2>
-                                                        <p className="text-white/80 mix-blend-overlay">Flowing gradients of light.</p>
+                                                    <div className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none p-4 text-center">
+                                                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 mix-blend-overlay">Aurora Borealis</h2>
+                                                        <p className="text-sm sm:text-base text-white/80 mix-blend-overlay">Flowing gradients of light.</p>
                                                     </div>
                                                 </AuroraBackground>
                                             </div>
                                         )}
 
                                         {activeId === 'particles-background' && (
-                                            <div className="w-full h-[500px] relative overflow-hidden rounded-xl border border-white/10 bg-gray-900">
+                                            <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] relative overflow-hidden rounded-xl border border-white/10 bg-gray-900">
                                                 <ParticlesBackground particleCount={80} color="#8B5CF6" />
-                                                <div className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none">
-                                                    <h2 className="text-4xl font-bold text-white mb-2">Neural Network</h2>
-                                                    <p className="text-gray-400">Interactive particle connections.</p>
+                                                <div className="relative z-10 flex flex-col items-center justify-center h-full pointer-events-none p-4 text-center">
+                                                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">Neural Network</h2>
+                                                    <p className="text-sm sm:text-base text-gray-400">Interactive particle connections.</p>
                                                 </div>
                                             </div>
                                         )}
