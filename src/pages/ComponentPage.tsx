@@ -13,6 +13,9 @@ import { cn } from '../lib/utils';
 import { AnimatedWall } from '../components/AnimatedWall';
 import { AuroraBackground } from '../components/AuroraBackground';
 import { ParticlesBackground } from '../components/ParticlesBackground';
+import { MorphingTabs } from '../components/MorphingTabs';
+import { SpotlightEffect, SpotlightCard } from '../components/SpotlightEffect';
+import { WormholePortal } from '../components/WormholePortal';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -363,6 +366,97 @@ export const ComponentPage = () => {
                                                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">Neural Network</h2>
                                                     <p className="text-sm sm:text-base text-gray-400">Interactive particle connections.</p>
                                                 </div>
+                                            </div>
+                                        )}
+
+                                        {activeId === 'morphing-tabs' && (
+                                            <div className="flex flex-col items-center justify-center gap-8 p-8 w-full">
+                                                <div className="space-y-6 w-full max-w-md">
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">Pill Variant</p>
+                                                        <MorphingTabs
+                                                            tabs={[
+                                                                { id: 'home', label: 'Home', icon: <Home className="w-4 h-4" /> },
+                                                                { id: 'search', label: 'Search', icon: <Search className="w-4 h-4" /> },
+                                                                { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
+                                                            ]}
+                                                            variant="pill"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">Boxed Variant</p>
+                                                        <MorphingTabs
+                                                            tabs={[
+                                                                { id: 'overview', label: 'Overview' },
+                                                                { id: 'analytics', label: 'Analytics' },
+                                                                { id: 'reports', label: 'Reports' },
+                                                            ]}
+                                                            variant="boxed"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">Underline Variant</p>
+                                                        <MorphingTabs
+                                                            tabs={[
+                                                                { id: 'all', label: 'All Posts' },
+                                                                { id: 'published', label: 'Published' },
+                                                                { id: 'drafts', label: 'Drafts' },
+                                                            ]}
+                                                            variant="underline"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {activeId === 'spotlight-effect' && (
+                                            <div className="flex flex-col items-center justify-center gap-6 p-8 w-full">
+                                                {/* Basic Spotlight */}
+                                                <SpotlightEffect className="p-8 bg-black/50 w-full max-w-md">
+                                                    <div className="text-center">
+                                                        <Zap className="w-12 h-12 text-accent mx-auto mb-4" />
+                                                        <h3 className="text-xl font-bold text-white mb-2">
+                                                            Hover to Reveal
+                                                        </h3>
+                                                        <p className="text-gray-400 text-sm">
+                                                            Move your cursor to see the spotlight effect
+                                                        </p>
+                                                    </div>
+                                                </SpotlightEffect>
+
+                                                {/* Spotlight Cards Grid */}
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
+                                                    <SpotlightCard>
+                                                        <Home className="w-8 h-8 text-accent mb-2" />
+                                                        <h4 className="font-semibold text-white">Feature One</h4>
+                                                        <p className="text-xs text-gray-500 mt-1">Purple glow</p>
+                                                    </SpotlightCard>
+                                                    <SpotlightCard spotlightColor="rgba(59, 130, 246, 0.2)">
+                                                        <Search className="w-8 h-8 text-blue-500 mb-2" />
+                                                        <h4 className="font-semibold text-white">Feature Two</h4>
+                                                        <p className="text-xs text-gray-500 mt-1">Blue glow</p>
+                                                    </SpotlightCard>
+                                                    <SpotlightCard spotlightColor="rgba(34, 197, 94, 0.2)">
+                                                        <Settings className="w-8 h-8 text-green-500 mb-2" />
+                                                        <h4 className="font-semibold text-white">Feature Three</h4>
+                                                        <p className="text-xs text-gray-500 mt-1">Green glow</p>
+                                                    </SpotlightCard>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {activeId === 'wormhole-portal' && (
+                                            <div className="w-full h-[400px] sm:h-[500px] lg:h-[600px] relative overflow-hidden rounded-xl border border-white/10">
+                                                <WormholePortal starCount={800} speed={1.2} interactive>
+                                                    <div className="flex flex-col items-center justify-center h-full pointer-events-none p-4 text-center">
+                                                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+                                                            Enter the Vortex
+                                                        </h2>
+                                                        <p className="text-base sm:text-lg text-gray-300 drop-shadow-md">
+                                                            Move your mouse to create a wormhole
+                                                        </p>
+                                                    </div>
+                                                </WormholePortal>
                                             </div>
                                         )}
                                     </div>

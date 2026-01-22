@@ -934,5 +934,477 @@ export const HeroSection = () => (
         </div>
     </div>
 );`
+    },
+    'morphing-tabs': {
+        id: 'morphing-tabs',
+        name: 'Morphing Tabs',
+        description: 'Animated tab navigation with smooth morphing indicator that flows between tabs.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Components',
+        code: `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '../lib/utils';
+
+export interface Tab {
+    id: string;
+    label: string;
+    icon?: React.ReactNode;
+}
+
+export interface MorphingTabsProps {
+    tabs: Tab[];
+    defaultTab?: string;
+    onChange?: (tabId: string) => void;
+    variant?: 'pill' | 'underline' | 'boxed';
+    className?: string;
+}
+
+export const MorphingTabs = ({
+    tabs,
+    defaultTab,
+    onChange,
+    variant = 'pill',
+    className,
+}: MorphingTabsProps) => {
+    const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id);
+
+    const handleTabClick = (tabId: string) => {
+        setActiveTab(tabId);
+        onChange?.(tabId);
+    };
+
+    return (
+        <div
+            className={cn(
+                "relative inline-flex items-center gap-1 p-1 rounded-xl",
+                variant === 'pill' && "bg-white/5 border border-white/10 backdrop-blur-sm",
+                variant === 'boxed' && "bg-white/5 border border-white/10 backdrop-blur-sm",
+                variant === 'underline' && "border-b border-white/10 rounded-none p-0 gap-0",
+                className
+            )}
+        >
+            {tabs.map((tab) => {
+                const isActive = activeTab === tab.id;
+
+                return (
+                    <button
+                        key={tab.id}
+                        onClick={() => handleTabClick(tab.id)}
+                        className={cn(
+                            "relative z-10 flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors duration-200",
+                            variant === 'underline' && "px-4 py-3",
+                            isActive
+                                ? "text-white"
+                                : "text-gray-400 hover:text-gray-200"
+                        )}
+                    >
+                        {tab.icon && (
+                            <span className={cn(
+                                "transition-colors duration-200",
+                                isActive ? "text-white" : "text-gray-500"
+                            )}>
+                                {tab.icon}
+                            </span>
+                        )}
+                        {tab.label}
+
+                        {/* Animated Indicator */}
+                        {isActive && (
+                            <motion.div
+                                layoutId="morphing-tab-indicator"
+                                className={cn(
+                                    "absolute inset-0 -z-10",
+                                    variant === 'pill' && "bg-accent rounded-lg shadow-lg shadow-accent/25",
+                                    variant === 'boxed' && "bg-white/10 rounded-lg border border-white/20",
+                                    variant === 'underline' && "bg-transparent border-b-2 border-accent rounded-none top-auto bottom-0 h-0.5"
+                                )}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 500,
+                                    damping: 35,
+                                }}
+                            />
+                        )}
+                    </button>
+                );
+            })}
+        </div>
+    );
+};
+
+// Tab Content component for managing content visibility
+export interface TabContentProps {
+    value: string;
+    activeTab: string;
+    children: React.ReactNode;
+    className?: string;
+}
+
+export const TabContent = ({ value, activeTab, children, className }: TabContentProps) => {
+    if (value !== activeTab) return null;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className={className}
+        >
+            {children}
+        </motion.div>
+    );
+};`,
+        usage: `import { MorphingTabs } from '@/components/MorphingTabs';
+import { Home, Search, Settings } from 'lucide-react';
+
+export const TabVariants = () => {
+    return (
+        <div className="space-y-8">
+            {/* Pill Variant - Filled background indicator */}
+            <div>
+                <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">
+                    Pill Variant
+                </p>
+                <MorphingTabs
+                    tabs={[
+                        { id: 'home', label: 'Home', icon: <Home className="w-4 h-4" /> },
+                        { id: 'search', label: 'Search', icon: <Search className="w-4 h-4" /> },
+                        { id: 'settings', label: 'Settings', icon: <Settings className="w-4 h-4" /> },
+                    ]}
+                    variant="pill"
+                    onChange={(tabId) => console.log('Selected:', tabId)}
+                />
+            </div>
+
+            {/* Boxed Variant - Subtle border indicator */}
+            <div>
+                <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">
+                    Boxed Variant
+                </p>
+                <MorphingTabs
+                    tabs={[
+                        { id: 'overview', label: 'Overview' },
+                        { id: 'analytics', label: 'Analytics' },
+                        { id: 'reports', label: 'Reports' },
+                    ]}
+                    variant="boxed"
+                />
+            </div>
+
+            {/* Underline Variant - Bottom border indicator */}
+            <div>
+                <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">
+                    Underline Variant
+                </p>
+                <MorphingTabs
+                    tabs={[
+                        { id: 'all', label: 'All Posts' },
+                        { id: 'published', label: 'Published' },
+                        { id: 'drafts', label: 'Drafts' },
+                    ]}
+                    variant="underline"
+                />
+            </div>
+        </div>
+    );
+};`
+    },
+    'spotlight-effect': {
+        id: 'spotlight-effect',
+        name: 'Spotlight Effect',
+        description: 'A mouse-following spotlight glow effect that dynamically highlights content as the cursor moves.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Components',
+        code: `import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
+import { cn } from '../lib/utils';
+
+export interface SpotlightEffectProps {
+    children: React.ReactNode;
+    className?: string;
+    spotlightColor?: string;
+    spotlightSize?: number;
+    spotlightIntensity?: number;
+    showBorder?: boolean;
+}
+
+export const SpotlightEffect = ({
+    children,
+    className,
+    spotlightColor = 'rgba(139, 92, 246, 0.15)',
+    spotlightSize = 400,
+    spotlightIntensity = 1,
+    showBorder = true,
+}: SpotlightEffectProps) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    
+    // Raw mouse position
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    
+    // Smooth spring animation for the spotlight
+    const springX = useSpring(mouseX, { stiffness: 300, damping: 30 });
+    const springY = useSpring(mouseY, { stiffness: 300, damping: 30 });
+    
+    // Opacity for fade in/out
+    const opacity = useSpring(0, { stiffness: 300, damping: 30 });
+
+    // Create dynamic background gradient using useMotionTemplate
+    const spotlightBackground = useMotionTemplate\`radial-gradient(\${spotlightSize}px circle at \${springX}px \${springY}px, \${spotlightColor}, transparent 80%)\`;
+    
+    // Border glow with stronger color
+    const borderGlowColor = spotlightColor.replace(/[\\d.]+\\)$/, '0.4)');
+    const borderBackground = useMotionTemplate\`radial-gradient(\${spotlightSize * 0.8}px circle at \${springX}px \${springY}px, \${borderGlowColor}, transparent 60%)\`;
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!containerRef.current) return;
+        
+        const rect = containerRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        mouseX.set(x);
+        mouseY.set(y);
+    };
+
+    const handleMouseEnter = () => {
+        opacity.set(spotlightIntensity);
+    };
+
+    const handleMouseLeave = () => {
+        opacity.set(0);
+    };
+
+    return (
+        <div
+            ref={containerRef}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className={cn(
+                "relative overflow-hidden",
+                showBorder && "border border-white/10 rounded-xl",
+                className
+            )}
+        >
+            {/* Spotlight gradient overlay */}
+            <motion.div
+                className="pointer-events-none absolute inset-0 z-10"
+                style={{
+                    opacity,
+                    background: spotlightBackground,
+                }}
+            />
+            
+            {/* Border glow effect */}
+            {showBorder && (
+                <motion.div
+                    className="pointer-events-none absolute inset-0 z-10 rounded-xl"
+                    style={{
+                        opacity,
+                        background: borderBackground,
+                        mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                        maskComposite: 'xor',
+                        WebkitMaskComposite: 'xor',
+                        padding: '1px',
+                    }}
+                />
+            )}
+            
+            {/* Content */}
+            <div className="relative z-0">
+                {children}
+            </div>
+        </div>
+    );
+};
+
+// Spotlight Card variant - a card with built-in spotlight effect
+export interface SpotlightCardProps {
+    children: React.ReactNode;
+    className?: string;
+    spotlightColor?: string;
+}
+
+export const SpotlightCard = ({
+    children,
+    className,
+    spotlightColor = 'rgba(139, 92, 246, 0.15)',
+}: SpotlightCardProps) => {
+    return (
+        <SpotlightEffect
+            spotlightColor={spotlightColor}
+            className={cn(
+                "bg-white/5 backdrop-blur-sm",
+                className
+            )}
+        >
+            <div className="p-6">
+                {children}
+            </div>
+        </SpotlightEffect>
+    );
+};`,
+        usage: `import { SpotlightEffect, SpotlightCard } from '@/components/SpotlightEffect';
+import { Sparkles, Zap, Star } from 'lucide-react';
+
+export const SpotlightDemo = () => {
+    return (
+        <div className="space-y-8">
+            {/* Basic Spotlight Effect */}
+            <SpotlightEffect className="p-8 bg-black/50">
+                <div className="text-center">
+                    <Sparkles className="w-12 h-12 text-accent mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-white mb-2">
+                        Hover to Reveal
+                    </h3>
+                    <p className="text-gray-400">
+                        Move your cursor to see the spotlight effect
+                    </p>
+                </div>
+            </SpotlightEffect>
+
+            {/* Custom Color Spotlight */}
+            <SpotlightEffect 
+                spotlightColor="rgba(59, 130, 246, 0.2)"
+                spotlightSize={300}
+                className="p-8 bg-black/50"
+            >
+                <div className="text-center">
+                    <Zap className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-white">
+                        Blue Spotlight
+                    </h3>
+                </div>
+            </SpotlightEffect>
+
+            {/* Spotlight Cards Grid */}
+            <div className="grid grid-cols-3 gap-4">
+                <SpotlightCard>
+                    <Star className="w-8 h-8 text-yellow-500 mb-2" />
+                    <h4 className="font-semibold text-white">Feature One</h4>
+                </SpotlightCard>
+                <SpotlightCard spotlightColor="rgba(34, 197, 94, 0.15)">
+                    <Star className="w-8 h-8 text-green-500 mb-2" />
+                    <h4 className="font-semibold text-white">Feature Two</h4>
+                </SpotlightCard>
+                <SpotlightCard spotlightColor="rgba(239, 68, 68, 0.15)">
+                    <Star className="w-8 h-8 text-red-500 mb-2" />
+                    <h4 className="font-semibold text-white">Feature Three</h4>
+                </SpotlightCard>
+            </div>
+        </div>
+    );
+};`
+    },
+    'wormhole-portal': {
+        id: 'wormhole-portal',
+        name: 'Wormhole Portal',
+        description: 'An infinite tunnel effect with particle acceleration and gravitational lensing. Creates a mesmerizing spacetime distortion visualization.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge',
+        category: 'Backgrounds',
+        code: `// Note: This component requires custom hooks. Install dependencies first.
+// Create: src/hooks/useCanvas.ts, src/hooks/useAnimationFrame.ts, src/hooks/useReducedMotion.ts
+
+import React, { useCallback, useEffect, useRef } from 'react';
+import { cn } from '../lib/utils';
+import { useCanvas } from '../hooks/useCanvas';
+import { useAnimationFrame } from '../hooks/useAnimationFrame';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+
+export interface WormholePortalProps {
+    children?: React.ReactNode;
+    className?: string;
+    intensity?: number; // 0-1, particle density
+    speed?: number; // animation speed multiplier
+    color?: string; // primary vortex color
+    distortion?: number; // 0-1, edge warping strength
+    interactive?: boolean; // mouse influence
+}
+
+interface Particle {
+    x: number;
+    y: number;
+    z: number;
+    angle: number;
+    speed: number;
+    size: number;
+    opacity: number;
+    hue: number;
+}
+
+export const WormholePortal = ({
+    children,
+    className,
+    intensity = 0.8,
+    speed = 1.0,
+    color = '#8B5CF6',
+    distortion = 0.3,
+    interactive = true,
+}: WormholePortalProps) => {
+    const prefersReducedMotion = useReducedMotion();
+    const [canvasRef, ctx] = useCanvas({ devicePixelRatio: true });
+    const particlesRef = useRef([]);
+    const mouseRef = useRef({ x: 0.5, y: 0.5 });
+    const timeRef = useRef(0);
+
+    // Full implementation in actual component file
+    // See: src/components/WormholePortal.tsx
+
+    if (prefersReducedMotion) {
+        return (
+            <div className={cn("relative w-full h-full overflow-hidden bg-black", className)}>
+                <div className="absolute inset-0" style={{ background: \`radial-gradient(circle at center, \${color}20 0%, transparent 70%)\` }} />
+                <div className="relative z-10 w-full h-full">{children}</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className={cn("relative w-full h-full overflow-hidden bg-black", className)}>
+            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+            <div className="relative z-10 w-full h-full">{children}</div>
+        </div>
+    );
+};`,
+        usage: `import { WormholePortal } from '@/components/WormholePortal';
+
+export const HeroSection = () => {
+    return (
+        <div className="h-screen w-full">
+            {/* Full-screen background */}
+            <WormholePortal intensity={0.8} speed={1.2} interactive>
+                <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                        <h1 className="text-6xl font-bold text-white mb-4">
+                            Enter the Vortex
+                        </h1>
+                        <p className="text-xl text-gray-300">
+                            Experience spacetime distortion
+                        </p>
+                    </div>
+                </div>
+            </WormholePortal>
+
+            {/* Custom color */}
+            <WormholePortal 
+                color="#3B82F6" 
+                intensity={0.6} 
+                distortion={0.5}
+                className="h-96"
+            >
+                <div className="p-8">
+                    <h2>Blue Wormhole</h2>
+                </div>
+            </WormholePortal>
+
+            {/* Non-interactive */}
+            <WormholePortal interactive={false} speed={0.5}>
+                <div className="content">Calm vortex</div>
+            </WormholePortal>
+        </div>
+    );
+};`
     }
 };
