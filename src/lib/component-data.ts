@@ -1400,11 +1400,433 @@ export const HeroSection = () => {
             </WormholePortal>
 
             {/* Non-interactive */}
-            <WormholePortal interactive={false} speed={0.5}>
-                <div className="content">Calm vortex</div>
             </WormholePortal>
         </div>
     );
 };`
+    },
+    'timeline': {
+        id: 'timeline',
+        name: 'Timeline',
+        description: 'A beautiful timeline component for displaying events, milestones, or project progress with scroll-reveal animations.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
+        category: 'Components',
+        code: `import React from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '../lib/utils';
+
+export interface TimelineItem {
+    id: string;
+    date: string;
+    title: string;
+    description?: string;
+    icon?: React.ReactNode;
+    color?: string;
+}
+
+interface TimelineProps {
+    items: TimelineItem[];
+    orientation?: 'vertical' | 'horizontal';
+    alternating?: boolean;
+    className?: string;
+    lineColor?: string;
+    animated?: boolean;
+}
+
+export const Timeline = ({
+    items,
+    orientation = 'vertical',
+    alternating = true,
+    className,
+    lineColor = 'bg-white/20',
+    animated = true,
+}: TimelineProps) => {
+    if (orientation === 'horizontal') {
+        return (
+            <div className={cn("relative w-full overflow-x-auto", className)}>
+                <div className={cn("absolute top-8 left-0 right-0 h-0.5", lineColor)} />
+                
+                <div className="flex gap-8 px-4 py-4 min-w-max">
+                    {items.map((item, index) => (
+                        <motion.div
+                            key={item.id}
+                            className="relative flex flex-col items-center min-w-[200px]"
+                            initial={animated ? { opacity: 0, y: 20 } : undefined}
+                            whileInView={animated ? { opacity: 1, y: 0 } : undefined}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ delay: index * 0.1, duration: 0.5 }}
+                        >
+                            <div className={cn(
+                                "relative z-10 flex items-center justify-center w-16 h-16 rounded-full border-2 border-white/20 bg-gray-900/80 backdrop-blur-sm shadow-lg",
+                                "hover:scale-110 hover:border-accent transition-all duration-300"
+                            )}>
+                                {item.icon ? (
+                                    <span className="text-accent">{item.icon}</span>
+                                ) : (
+                                    <span className="w-3 h-3 rounded-full bg-accent" />
+                                )}
+                            </div>
+                            
+                            <div className="mt-4 text-center">
+                                <span className="text-xs font-medium text-accent uppercase tracking-wider">
+                                    {item.date}
+                                </span>
+                                <h3 className="mt-1 text-lg font-semibold text-white">
+                                    {item.title}
+                                </h3>
+                                {item.description && (
+                                    <p className="mt-1 text-sm text-gray-400 max-w-[180px]">
+                                        {item.description}
+                                    </p>
+                                )}
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className={cn("relative", className)}>
+            <div className={cn(
+                "absolute left-1/2 -translate-x-1/2 w-0.5 h-full",
+                lineColor,
+                !alternating && "left-8"
+            )} />
+            
+            <div className="relative space-y-12">
+                {items.map((item, index) => {
+                    const isLeft = alternating ? index % 2 === 0 : false;
+                    
+                    return (
+                        <motion.div
+                            key={item.id}
+                            className={cn(
+                                "relative flex items-center",
+                                alternating ? "justify-center" : "justify-start pl-16"
+                            )}
+                            initial={animated ? { 
+                                opacity: 0, 
+                                x: alternating ? (isLeft ? -50 : 50) : -30 
+                            } : undefined}
+                            whileInView={animated ? { opacity: 1, x: 0 } : undefined}
+                            viewport={{ once: true, margin: "-100px" }}
+                            transition={{ delay: index * 0.15, duration: 0.5, type: "spring", stiffness: 100 }}
+                        >
+                            <div className={cn(
+                                "relative w-[calc(50%-2rem)] p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm",
+                                "hover:bg-white/10 hover:border-white/20 transition-all duration-300 group",
+                                alternating 
+                                    ? (isLeft ? "mr-auto text-right" : "ml-auto text-left")
+                                    : "w-full text-left"
+                            )}>
+                                <div className={cn(
+                                    "absolute top-1/2 -translate-y-1/2 w-8 h-0.5",
+                                    lineColor,
+                                    "group-hover:bg-accent/50 transition-colors",
+                                    alternating ? (isLeft ? "-right-8" : "-left-8") : "-left-8"
+                                )} />
+                                
+                                <span className="text-xs font-medium text-accent uppercase tracking-wider">
+                                    {item.date}
+                                </span>
+                                <h3 className="mt-1 text-lg font-semibold text-white group-hover:text-accent transition-colors">
+                                    {item.title}
+                                </h3>
+                                {item.description && (
+                                    <p className="mt-2 text-sm text-gray-400">{item.description}</p>
+                                )}
+                            </div>
+                            
+                            <div className={cn(
+                                "absolute left-1/2 -translate-x-1/2 z-10",
+                                "flex items-center justify-center w-12 h-12 rounded-full",
+                                "border-2 border-white/20 bg-gray-900/90 backdrop-blur-sm",
+                                "hover:scale-110 hover:border-accent transition-all duration-300",
+                                "shadow-[0_0_20px_rgba(139,92,246,0.3)]",
+                                !alternating && "left-8"
+                            )}>
+                                {item.icon ? (
+                                    <span className="text-accent">{item.icon}</span>
+                                ) : (
+                                    <motion.div 
+                                        className="w-2.5 h-2.5 rounded-full bg-accent"
+                                        animate={{ scale: [1, 1.2, 1] }}
+                                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                    />
+                                )}
+                            </div>
+                        </motion.div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};`,
+        usage: `import { Timeline, TimelineItem } from '@/components/Timeline';
+import { Rocket, Star, Flag, Trophy, Code, Zap } from 'lucide-react';
+
+const milestones: TimelineItem[] = [
+    {
+        id: '1',
+        date: 'January 2024',
+        title: 'Project Kickoff',
+        description: 'Initial planning and team formation.',
+        icon: <Rocket className="w-5 h-5" />,
+    },
+    {
+        id: '2',
+        date: 'March 2024',
+        title: 'Alpha Release',
+        description: 'First internal test version deployed.',
+        icon: <Code className="w-5 h-5" />,
+    },
+    {
+        id: '3',
+        date: 'June 2024',
+        title: 'Beta Launch',
+        description: 'Public beta with early adopters.',
+        icon: <Star className="w-5 h-5" />,
+    },
+    {
+        id: '4',
+        date: 'September 2024',
+        title: 'Version 1.0',
+        description: 'Official production release!',
+        icon: <Trophy className="w-5 h-5" />,
+    },
+];
+
+export const ProjectTimeline = () => (
+    <div className="max-w-4xl mx-auto py-12">
+        <h2 className="text-3xl font-bold text-white text-center mb-12">
+            Our Journey
+        </h2>
+        
+        {/* Vertical Alternating (default) */}
+        <Timeline items={milestones} />
+        
+        {/* Horizontal */}
+        <Timeline items={milestones} orientation="horizontal" className="mt-16" />
+        
+        {/* Vertical Non-Alternating */}
+        <Timeline items={milestones} alternating={false} className="mt-16" />
+    </div>
+);`
+    },
+    'kanban-board': {
+        id: 'kanban-board',
+        name: 'Kanban Board',
+        description: 'A drag-and-drop task board with columns, cards, filtering, sorting, and WIP limits.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
+        category: 'Components',
+        code: `import React, { useState, useCallback } from 'react';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
+import { cn } from '../lib/utils';
+import { Plus, MoreHorizontal, GripVertical, Filter, ArrowUpDown } from 'lucide-react';
+
+export interface KanbanCard {
+    id: string;
+    title: string;
+    description?: string;
+    labels?: { text: string; color: string }[];
+    assignee?: { name: string; avatar?: string };
+    priority?: 'low' | 'medium' | 'high';
+    dueDate?: string;
+}
+
+export interface KanbanColumn {
+    id: string;
+    title: string;
+    cards: KanbanCard[];
+    color?: string;
+    wipLimit?: number;
+}
+
+interface KanbanBoardProps {
+    columns: KanbanColumn[];
+    onColumnsChange?: (columns: KanbanColumn[]) => void;
+    onCardClick?: (card: KanbanCard, columnId: string) => void;
+    onAddCard?: (columnId: string) => void;
+    className?: string;
+}
+
+const priorityColors = {
+    low: 'bg-green-500/20 text-green-400 border-green-500/30',
+    medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+    high: 'bg-red-500/20 text-red-400 border-red-500/30',
+};
+
+const Card = ({ card, onClick }: { card: KanbanCard; onClick?: () => void }) => (
+    <motion.div
+        layout
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        whileHover={{ scale: 1.02 }}
+        onClick={onClick}
+        className={cn(
+            "p-3 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm cursor-pointer",
+            "hover:bg-white/10 hover:border-white/20 transition-all duration-200 group"
+        )}
+    >
+        {card.labels?.length > 0 && (
+            <div className="flex flex-wrap gap-1 mb-2">
+                {card.labels.map((label, i) => (
+                    <span key={i} className="text-[10px] px-2 py-0.5 rounded-full font-medium"
+                        style={{ backgroundColor: label.color + '30', color: label.color }}>
+                        {label.text}
+                    </span>
+                ))}
+            </div>
+        )}
+        <h4 className="text-sm font-medium text-white mb-1 group-hover:text-accent transition-colors">
+            {card.title}
+        </h4>
+        {card.description && <p className="text-xs text-gray-500 line-clamp-2 mb-2">{card.description}</p>}
+        <div className="flex items-center justify-between mt-2">
+            {card.priority && (
+                <span className={cn("text-[10px] px-2 py-0.5 rounded border font-medium uppercase", priorityColors[card.priority])}>
+                    {card.priority}
+                </span>
+            )}
+            {card.dueDate && <span className="text-[10px] text-gray-500">{card.dueDate}</span>}
+            {card.assignee && (
+                <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center text-[10px] font-medium text-accent">
+                    {card.assignee.name.charAt(0).toUpperCase()}
+                </div>
+            )}
+        </div>
+    </motion.div>
+);
+
+export const KanbanBoard = ({ columns: initialColumns, onColumnsChange, onCardClick, onAddCard, className }: KanbanBoardProps) => {
+    const [columns, setColumns] = useState<KanbanColumn[]>(initialColumns);
+    const [filterText, setFilterText] = useState('');
+    const [sortBy, setSortBy] = useState<'none' | 'priority' | 'date'>('none');
+
+    const updateColumns = useCallback((newColumns: KanbanColumn[]) => {
+        setColumns(newColumns);
+        onColumnsChange?.(newColumns);
+    }, [onColumnsChange]);
+
+    const handleCardsReorder = useCallback((columnId: string, newCards: KanbanCard[]) => {
+        updateColumns(columns.map(col => col.id === columnId ? { ...col, cards: newCards } : col));
+    }, [columns, updateColumns]);
+
+    const getProcessedColumns = useCallback(() => {
+        return columns.map(col => {
+            let cards = [...col.cards];
+            if (filterText) {
+                cards = cards.filter(card => 
+                    card.title.toLowerCase().includes(filterText.toLowerCase())
+                );
+            }
+            if (sortBy === 'priority') {
+                const order = { high: 0, medium: 1, low: 2 };
+                cards.sort((a, b) => (order[a.priority || 'low']) - (order[b.priority || 'low']));
+            }
+            return { ...col, cards };
+        });
+    }, [columns, filterText, sortBy]);
+
+    return (
+        <div className={cn("flex flex-col h-full", className)}>
+            <div className="flex items-center gap-4 mb-4 px-2">
+                <div className="relative flex-1 max-w-xs">
+                    <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <input type="text" placeholder="Filter cards..." value={filterText}
+                        onChange={(e) => setFilterText(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-accent/50" />
+                </div>
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)}
+                    className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
+                    <option value="none">No sorting</option>
+                    <option value="priority">Priority</option>
+                    <option value="date">Due Date</option>
+                </select>
+            </div>
+            <div className="flex-1 overflow-x-auto">
+                <div className="flex gap-4 p-2 min-h-full">
+                    {getProcessedColumns().map((column) => (
+                        <div key={column.id} className="flex-shrink-0 w-72 bg-white/[0.02] rounded-xl border border-white/10 flex flex-col max-h-full">
+                            <div className="p-3 border-b border-white/10 flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    {column.color && <div className="w-2 h-2 rounded-full" style={{ backgroundColor: column.color }} />}
+                                    <h3 className="text-sm font-semibold text-white">{column.title}</h3>
+                                    <span className="text-xs px-1.5 py-0.5 rounded-full bg-white/10 text-gray-400">
+                                        {column.cards.length}{column.wipLimit && \`/\${column.wipLimit}\`}
+                                    </span>
+                                </div>
+                                <button className="text-gray-500 hover:text-white p-1 rounded hover:bg-white/10">
+                                    <MoreHorizontal className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-hide">
+                                <Reorder.Group axis="y" values={column.cards} onReorder={(cards) => handleCardsReorder(column.id, cards)} className="space-y-2">
+                                    <AnimatePresence>
+                                        {column.cards.map((card) => (
+                                            <Reorder.Item key={card.id} value={card}>
+                                                <Card card={card} onClick={() => onCardClick?.(card, column.id)} />
+                                            </Reorder.Item>
+                                        ))}
+                                    </AnimatePresence>
+                                </Reorder.Group>
+                            </div>
+                            <div className="p-2 border-t border-white/10">
+                                <button onClick={() => onAddCard?.(column.id)}
+                                    className="w-full py-2 rounded-lg text-sm font-medium bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2">
+                                    <Plus className="w-4 h-4" /> Add Card
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};`,
+        usage: `import { KanbanBoard, KanbanColumn } from '@/components/KanbanBoard';
+
+const initialColumns: KanbanColumn[] = [
+    {
+        id: 'todo',
+        title: 'To Do',
+        color: '#EF4444',
+        wipLimit: 5,
+        cards: [
+            { id: '1', title: 'Design system update', priority: 'high', labels: [{ text: 'Design', color: '#8B5CF6' }] },
+            { id: '2', title: 'API integration', priority: 'medium', assignee: { name: 'John' } },
+        ],
+    },
+    {
+        id: 'in-progress',
+        title: 'In Progress',
+        color: '#F59E0B',
+        cards: [
+            { id: '3', title: 'User authentication', priority: 'high', dueDate: 'Jan 25' },
+        ],
+    },
+    {
+        id: 'done',
+        title: 'Done',
+        color: '#22C55E',
+        cards: [
+            { id: '4', title: 'Project setup', priority: 'low' },
+        ],
+    },
+];
+
+export const TaskBoard = () => (
+    <div className="h-[600px] bg-gray-900 p-4 rounded-xl">
+        <KanbanBoard
+            columns={initialColumns}
+            onColumnsChange={(cols) => console.log('Updated:', cols)}
+            onCardClick={(card) => console.log('Clicked:', card)}
+            onAddCard={(colId) => console.log('Add to:', colId)}
+        />
+    </div>
+);`
     }
 };

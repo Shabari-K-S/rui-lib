@@ -6,7 +6,7 @@ import { GlassCard } from '../components/GlassCard';
 import { SmartBreadcrumb } from '../components/SmartBreadcrumb';
 import { XRayReveal } from '../components/XRayReveal';
 import { MagneticButton } from '../components/MagneticButton';
-import { Home, Search, Calendar, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2 } from 'lucide-react';
+import { Home, Search, Calendar, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy } from 'lucide-react';
 import { COMPONENTS } from '../lib/component-data';
 import { CodeBlock } from '../components/CodeBlock';
 import { cn } from '../lib/utils';
@@ -16,6 +16,8 @@ import { ParticlesBackground } from '../components/ParticlesBackground';
 import { MorphingTabs } from '../components/MorphingTabs';
 import { SpotlightEffect, SpotlightCard } from '../components/SpotlightEffect';
 import { WormholePortal } from '../components/WormholePortal';
+import { Timeline } from '../components/Timeline';
+import { KanbanBoard } from '../components/KanbanBoard';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -457,6 +459,78 @@ export const ComponentPage = () => {
                                                         </p>
                                                     </div>
                                                 </WormholePortal>
+                                            </div>
+                                        )}
+
+                                        {activeId === 'timeline' && (
+                                            <div className="w-full p-4 sm:p-8 overflow-auto max-h-[600px]">
+                                                <Timeline
+                                                    items={[
+                                                        {
+                                                            id: '1',
+                                                            date: 'January 2024',
+                                                            title: 'Project Kickoff',
+                                                            description: 'Initial planning and team formation.',
+                                                            icon: <Rocket className="w-5 h-5" />,
+                                                        },
+                                                        {
+                                                            id: '2',
+                                                            date: 'March 2024',
+                                                            title: 'Alpha Release',
+                                                            description: 'First internal test version deployed.',
+                                                            icon: <Code className="w-5 h-5" />,
+                                                        },
+                                                        {
+                                                            id: '3',
+                                                            date: 'June 2024',
+                                                            title: 'Beta Launch',
+                                                            description: 'Public beta with early adopters.',
+                                                            icon: <Star className="w-5 h-5" />,
+                                                        },
+                                                        {
+                                                            id: '4',
+                                                            date: 'September 2024',
+                                                            title: 'Version 1.0',
+                                                            description: 'Official production release!',
+                                                            icon: <Trophy className="w-5 h-5" />,
+                                                        },
+                                                    ]}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {activeId === 'kanban-board' && (
+                                            <div className="w-full h-[500px] p-4 overflow-hidden">
+                                                <KanbanBoard
+                                                    columns={[
+                                                        {
+                                                            id: 'todo',
+                                                            title: 'To Do',
+                                                            color: '#EF4444',
+                                                            wipLimit: 5,
+                                                            cards: [
+                                                                { id: '1', title: 'Design system update', priority: 'high', labels: [{ text: 'Design', color: '#8B5CF6' }] },
+                                                                { id: '2', title: 'API integration', priority: 'medium', assignee: { name: 'John' } },
+                                                            ],
+                                                        },
+                                                        {
+                                                            id: 'in-progress',
+                                                            title: 'In Progress',
+                                                            color: '#F59E0B',
+                                                            cards: [
+                                                                { id: '3', title: 'User authentication', priority: 'high', dueDate: 'Jan 25' },
+                                                            ],
+                                                        },
+                                                        {
+                                                            id: 'done',
+                                                            title: 'Done',
+                                                            color: '#22C55E',
+                                                            cards: [
+                                                                { id: '4', title: 'Project setup', priority: 'low' },
+                                                            ],
+                                                        },
+                                                    ]}
+                                                />
                                             </div>
                                         )}
                                     </div>
