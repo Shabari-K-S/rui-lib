@@ -18,6 +18,7 @@ import { SpotlightEffect, SpotlightCard } from '../components/SpotlightEffect';
 import { WormholePortal } from '../components/WormholePortal';
 import { Timeline } from '../components/Timeline';
 import { KanbanBoard } from '../components/KanbanBoard';
+import { FileUploadZone } from '../components/FileUploadZone';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -530,6 +531,18 @@ export const ComponentPage = () => {
                                                             ],
                                                         },
                                                     ]}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {activeId === 'file-upload' && (
+                                            <div className="w-full max-w-lg mx-auto p-4">
+                                                <FileUploadZone
+                                                    accept="image/*,.pdf,.doc,.docx"
+                                                    maxSize={5 * 1024 * 1024}
+                                                    maxFiles={5}
+                                                    multiple={true}
+                                                    onFilesSelected={(files) => console.log('Selected:', files)}
                                                 />
                                             </div>
                                         )}
