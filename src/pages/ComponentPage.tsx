@@ -6,7 +6,7 @@ import { GlassCard } from '../components/GlassCard';
 import { SmartBreadcrumb } from '../components/SmartBreadcrumb';
 import { XRayReveal } from '../components/XRayReveal';
 import { MagneticButton } from '../components/MagneticButton';
-import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy } from 'lucide-react';
+import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy, Users, DollarSign, ShoppingCart, Activity } from 'lucide-react';
 import { COMPONENTS } from '../lib/component-data';
 import { CodeBlock } from '../components/CodeBlock';
 import { cn } from '../lib/utils';
@@ -20,6 +20,7 @@ import { Timeline } from '../components/Timeline';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { FileUploadZone } from '../components/FileUploadZone';
 import { Calendar as CalendarComponent } from '../components/Calendar';
+import { StatCard } from '../components/StatCard';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -556,6 +557,55 @@ export const ComponentPage = () => {
                                                         { id: '2', title: 'Deadline', date: new Date(Date.now() + 86400000 * 3), color: '#EF4444' },
                                                         { id: '3', title: 'Launch', date: new Date(Date.now() + 86400000 * 7), color: '#22C55E' },
                                                     ]}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {activeId === 'stat-card' && (
+                                            <div className="w-full p-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                                                {/* Default Variant */}
+                                                <StatCard
+                                                    title="Total Revenue"
+                                                    value={45231.89}
+                                                    prefix="$"
+                                                    decimals={2}
+                                                    trend={{ value: 12.5, direction: 'up', label: 'vs last month' }}
+                                                    sparklineData={[40, 30, 45, 50, 65, 60, 75, 80]}
+                                                    color="green"
+                                                    icon={<DollarSign />}
+                                                />
+
+                                                {/* Compact Variant */}
+                                                <StatCard
+                                                    title="Active Users"
+                                                    value={1234}
+                                                    variant="compact"
+                                                    trend={{ value: 5.2, direction: 'down' }}
+                                                    color="blue"
+                                                    icon={<Users />}
+                                                />
+
+                                                {/* Minimal Variant */}
+                                                <StatCard
+                                                    title="Conversion Rate"
+                                                    value={3.42}
+                                                    suffix="%"
+                                                    decimals={2}
+                                                    variant="minimal"
+                                                    color="purple"
+                                                    icon={<Activity />}
+                                                />
+
+                                                {/* Prominent Variant */}
+                                                <StatCard
+                                                    title="Total Orders"
+                                                    value={854}
+                                                    variant="prominent"
+                                                    trend={{ value: 8.1, direction: 'up' }}
+                                                    sparklineData={[10, 25, 40, 30, 55, 60, 45, 80, 95]}
+                                                    color="yellow"
+                                                    icon={<ShoppingCart />}
+                                                    className="md:col-span-1"
                                                 />
                                             </div>
                                         )}

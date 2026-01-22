@@ -2012,5 +2012,87 @@ export const CalendarDemo = () => {
         </div>
     );
 };`
+    },
+    'stat-card': {
+        id: 'stat-card',
+        name: 'Stats & Metrics',
+        description: 'Versatile statistic cards with trends, sparklines, and animated counters. Supports multiple layout variants.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
+        category: 'Components',
+        code: `import React, { useEffect, useMemo, useRef } from 'react';
+import { motion, useSpring, useTransform, useInView } from 'framer-motion';
+import { cn } from '../lib/utils';
+import { ArrowUpRight, ArrowDownRight, Minus, Activity } from 'lucide-react';
+
+// ... Component implementation ...
+// (See full file for details)
+
+export const StatCard = ({
+    title,
+    value,
+    icon,
+    trend,
+    sparklineData,
+    variant = 'default',
+    color = 'blue',
+    className,
+}: StatCardProps) => {
+    // Implementation
+    return (
+        <motion.div className={cn("p-5 rounded-xl border...", className)}>
+            {/* Content ... */}
+        </motion.div>
+    );
+};`,
+        usage: `import { StatCard } from '@/components/StatCard';
+import { Users, DollarSign, ShoppingCart, Activity } from 'lucide-react';
+
+export const StatsDemo = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Default Variant */}
+        <StatCard
+            title="Total Revenue"
+            value={45231.89}
+            prefix="$"
+            decimals={2}
+            trend={{ value: 12.5, direction: 'up', label: 'vs last month' }}
+            sparklineData={[40, 30, 45, 50, 65, 60, 75, 80]}
+            color="green"
+            icon={<DollarSign />}
+        />
+
+        {/* Compact Variant */}
+        <StatCard
+            title="Active Users"
+            value={1234}
+            variant="compact"
+            trend={{ value: 5.2, direction: 'down' }}
+            color="blue"
+        />
+
+        {/* Minimal Variant */}
+        <StatCard
+            title="Conversion Rate"
+            value={3.42}
+            suffix="%"
+            decimals={2}
+            variant="minimal"
+            color="purple"
+            icon={<Activity />}
+        />
+
+        {/* Prominent Variant */}
+        <StatCard
+            title="Total Orders"
+            value={854}
+            variant="prominent"
+            trend={{ value: 8.1, direction: 'up' }}
+            sparklineData={[10, 25, 40, 30, 55, 60, 45, 80, 95]}
+            color="yellow"
+            icon={<ShoppingCart />}
+            className="md:col-span-2"
+        />
+    </div>
+);`
     }
 };
