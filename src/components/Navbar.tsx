@@ -1,4 +1,4 @@
-import { Hexagon, Search, Github } from 'lucide-react';
+import { Search, Github } from 'lucide-react';
 import { useNexus } from '../lib/nexus-provider';
 import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ export const Navbar = ({
     return (
         <header className={cn(
             "fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-300",
-            "bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-[var(--glass-border)]",
+            "bg-black/50 backdrop-blur-xl border-b border-white/5 supports-[backdrop-filter]:bg-black/20",
             className
         )}>
             {/* Logo */}
@@ -21,12 +21,9 @@ export const Navbar = ({
                 to="/"
                 className="flex items-center gap-2 cursor-pointer group"
             >
-                <div className="relative">
-                    <Hexagon className="w-8 h-8 text-accent fill-accent/10 transition-transform group-hover:rotate-12" />
-                    <div className="absolute inset-0 bg-accent/20 blur-lg rounded-full animate-pulse" />
-                </div>
+                <img src="/logo.png" alt="ReactUI" className="h-8 w-auto object-contain" />
                 <span className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-                    Nexus<span className="text-accent">UI</span>
+                    React<span className="text-accent">UI</span>
                 </span>
             </Link>
 
