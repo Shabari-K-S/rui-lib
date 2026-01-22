@@ -1928,5 +1928,89 @@ export const UploadDemo = () => (
         />
     </div>
 );`
+    },
+    'calendar': {
+        id: 'calendar',
+        name: 'Calendar',
+        description: 'Full-featured calendar with month view, date selection, range picking, and event markers.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
+        category: 'Components',
+        code: `import React, { useState, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../lib/utils';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+
+// Types and helpers included in full component...
+
+export const Calendar = ({ value, onChange, events = [], className }: CalendarProps) => {
+    const today = new Date();
+    const [currentMonth, setCurrentMonth] = useState(value?.getMonth() ?? today.getMonth());
+    const [currentYear, setCurrentYear] = useState(value?.getFullYear() ?? today.getFullYear());
+
+    // Generate and render calendar grid...
+    return (
+        <div className={cn("w-full max-w-sm", className)}>
+            <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+                {/* Header with navigation */}
+                {/* Day headers */}
+                {/* Calendar grid with dates */}
+            </div>
+        </div>
+    );
+};
+
+export const DatePicker = ({ value, onChange, placeholder = "Select date" }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <div className="relative">
+            <button onClick={() => setIsOpen(!isOpen)} className="...">
+                <CalendarIcon className="w-4 h-4" />
+                {value ? value.toLocaleDateString() : placeholder}
+            </button>
+            {isOpen && <Calendar value={value} onChange={onChange} />}
+        </div>
+    );
+};`,
+        usage: `import { Calendar, DatePicker } from '@/components/Calendar';
+
+export const CalendarDemo = () => {
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [rangeStart, setRangeStart] = useState<Date | null>(null);
+    const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
+
+    const events = [
+        { id: '1', title: 'Meeting', date: new Date(), color: '#8B5CF6' },
+        { id: '2', title: 'Deadline', date: new Date(Date.now() + 86400000 * 3), color: '#EF4444' },
+    ];
+
+    return (
+        <div className="space-y-8">
+            {/* Basic Calendar */}
+            <Calendar
+                value={selectedDate}
+                onChange={setSelectedDate}
+                events={events}
+            />
+
+            {/* Date Range Selection */}
+            <Calendar
+                rangeMode
+                rangeStart={rangeStart}
+                rangeEnd={rangeEnd}
+                onRangeChange={(start, end) => {
+                    setRangeStart(start);
+                    setRangeEnd(end);
+                }}
+            />
+
+            {/* DatePicker Dropdown */}
+            <DatePicker
+                value={selectedDate}
+                onChange={setSelectedDate}
+                placeholder="Pick a date"
+            />
+        </div>
+    );
+};`
     }
 };

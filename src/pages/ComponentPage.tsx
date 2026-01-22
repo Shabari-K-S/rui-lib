@@ -6,7 +6,7 @@ import { GlassCard } from '../components/GlassCard';
 import { SmartBreadcrumb } from '../components/SmartBreadcrumb';
 import { XRayReveal } from '../components/XRayReveal';
 import { MagneticButton } from '../components/MagneticButton';
-import { Home, Search, Calendar, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy } from 'lucide-react';
+import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy } from 'lucide-react';
 import { COMPONENTS } from '../lib/component-data';
 import { CodeBlock } from '../components/CodeBlock';
 import { cn } from '../lib/utils';
@@ -19,6 +19,7 @@ import { WormholePortal } from '../components/WormholePortal';
 import { Timeline } from '../components/Timeline';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { FileUploadZone } from '../components/FileUploadZone';
+import { Calendar as CalendarComponent } from '../components/Calendar';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -241,7 +242,7 @@ export const ComponentPage = () => {
                                                 <Dock>
                                                     <DockIcon label="Home" isActive={activeDockApp === 'home'} onClick={() => setActiveDockApp('home')}><Home /></DockIcon>
                                                     <DockIcon label="Search" isActive={activeDockApp === 'search'} onClick={() => setActiveDockApp('search')}><Search /></DockIcon>
-                                                    <DockIcon label="Calendar" isActive={activeDockApp === 'calendar'} onClick={() => setActiveDockApp('calendar')}><Calendar /></DockIcon>
+                                                    <DockIcon label="Calendar" isActive={activeDockApp === 'calendar'} onClick={() => setActiveDockApp('calendar')}><CalendarIcon /></DockIcon>
                                                     <DockIcon label="Files" isActive={activeDockApp === 'files'} onClick={() => setActiveDockApp('files')}><Folder /></DockIcon>
                                                     <DockIcon label="Messages" isActive={activeDockApp === 'messages'} onClick={() => setActiveDockApp('messages')}><MessageSquare /></DockIcon>
                                                 </Dock>
@@ -543,6 +544,18 @@ export const ComponentPage = () => {
                                                     maxFiles={5}
                                                     multiple={true}
                                                     onFilesSelected={(files) => console.log('Selected:', files)}
+                                                />
+                                            </div>
+                                        )}
+
+                                        {activeId === 'calendar' && (
+                                            <div className="w-full flex items-center justify-center p-4">
+                                                <CalendarComponent
+                                                    events={[
+                                                        { id: '1', title: 'Meeting', date: new Date(), color: '#8B5CF6' },
+                                                        { id: '2', title: 'Deadline', date: new Date(Date.now() + 86400000 * 3), color: '#EF4444' },
+                                                        { id: '3', title: 'Launch', date: new Date(Date.now() + 86400000 * 7), color: '#22C55E' },
+                                                    ]}
                                                 />
                                             </div>
                                         )}
