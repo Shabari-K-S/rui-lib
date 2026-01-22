@@ -22,7 +22,27 @@ interface Star {
     originalY: number;
     size: number;
     brightness: number;
+    color: string;
 }
+
+// Real sky star colors based on stellar classification
+// O/B type: Blue-white, A type: White, F/G type: Yellow, K type: Orange, M type: Red
+const STAR_COLORS = {
+    white: '#ffffff',      // 70% probability - most common visible
+    blueWhite: '#cad8ff',  // Hot O/B type stars
+    yellow: '#fff4e8',     // Sun-like G type stars
+    orange: '#ffd2a1',     // K type stars like Arcturus
+    red: '#ffcc99',        // M type stars like Betelgeuse
+};
+
+const getRandomStarColor = (): string => {
+    const rand = Math.random();
+    if (rand < 0.70) return STAR_COLORS.white;
+    if (rand < 0.78) return STAR_COLORS.blueWhite;
+    if (rand < 0.86) return STAR_COLORS.yellow;
+    if (rand < 0.94) return STAR_COLORS.orange;
+    return STAR_COLORS.red;
+};
 
 export const WormholePortal = ({
     children,
@@ -56,6 +76,7 @@ export const WormholePortal = ({
                 originalY: y,
                 size: 1.0 + Math.random() * 2.0,
                 brightness: 0.5 + Math.random() * 0.5,
+                color: getRandomStarColor(),
             });
         }
 
@@ -172,8 +193,8 @@ export const WormholePortal = ({
             ctx.save();
             ctx.globalAlpha = opacity * 0.5;
             const glowGradient = ctx.createRadialGradient(px, py, 0, px, py, starSize * 3);
-            glowGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-            glowGradient.addColorStop(1, 'transparent');
+            glowGradient.addColorStop(0, star.color);
+            glowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
             ctx.fillStyle = glowGradient;
             ctx.fillRect(px - starSize * 3, py - starSize * 3, starSize * 6, starSize * 6);
             ctx.restore();
@@ -181,7 +202,7 @@ export const WormholePortal = ({
             // Star core (with stretching)
             ctx.save();
             ctx.globalAlpha = opacity;
-            ctx.fillStyle = '#ffffff';
+            ctx.fillStyle = star.color;
             ctx.beginPath();
             ctx.ellipse(px, py, starSize * stretchX, starSize * stretchY, 0, 0, Math.PI * 2);
             ctx.fill();
