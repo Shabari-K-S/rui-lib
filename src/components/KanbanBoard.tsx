@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence, Reorder } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
 import { Plus, MoreHorizontal, Filter, ArrowUpDown } from 'lucide-react';
 
@@ -37,140 +37,163 @@ const priorityColors = {
     high: 'bg-red-500/20 text-red-400 border-red-500/30',
 };
 
-// Card Component
+// Card Component with HTML5 drag support
 const Card = ({
     card,
+    columnId,
     onClick,
+    onDragStart,
+    isDragging,
 }: {
     card: KanbanCard;
+    columnId: string;
     onClick?: () => void;
+    onDragStart: (e: React.DragEvent, card: KanbanCard, columnId: string) => void;
+    isDragging: boolean;
 }) => {
     return (
-        <motion.div
-            layout
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            whileHover={{ scale: 1.02 }}
-            onClick={onClick}
-            className={cn(
-                "p-3 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm cursor-pointer",
-                "hover:bg-white/10 hover:border-white/20 transition-all duration-200",
-                "group"
-            )}
+        <div
+            draggable
+            onDragStart={(e) => onDragStart(e, card, columnId)}
+            className="cursor-grab active:cursor-grabbing"
         >
-            {/* Labels */}
-            {card.labels && card.labels.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-2">
-                    {card.labels.map((label, i) => (
-                        <span
-                            key={i}
-                            className="text-[10px] px-2 py-0.5 rounded-full font-medium"
-                            style={{ backgroundColor: label.color + '30', color: label.color }}
-                        >
-                            {label.text}
-                        </span>
-                    ))}
-                </div>
-            )}
-
-            {/* Title */}
-            <h4 className="text-sm font-medium text-white mb-1 group-hover:text-accent transition-colors">
-                {card.title}
-            </h4>
-
-            {/* Description */}
-            {card.description && (
-                <p className="text-xs text-gray-500 line-clamp-2 mb-2">
-                    {card.description}
-                </p>
-            )}
-
-            {/* Footer */}
-            <div className="flex items-center justify-between mt-2">
-                {/* Priority */}
-                {card.priority && (
-                    <span className={cn(
-                        "text-[10px] px-2 py-0.5 rounded border font-medium uppercase",
-                        priorityColors[card.priority]
-                    )}>
-                        {card.priority}
-                    </span>
+            <motion.div
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: isDragging ? 0.5 : 1, y: 0, scale: isDragging ? 0.95 : 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                whileHover={{ scale: 1.02 }}
+                onClick={onClick}
+                className={cn(
+                    "p-3 rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm",
+                    "hover:bg-white/10 hover:border-white/20 transition-all duration-200",
+                    "group",
+                    isDragging && "opacity-50"
                 )}
-
-                {/* Due Date */}
-                {card.dueDate && (
-                    <span className="text-[10px] text-gray-500">
-                        {card.dueDate}
-                    </span>
-                )}
-
-                {/* Assignee */}
-                {card.assignee && (
-                    <div className="flex items-center gap-1">
-                        {card.assignee.avatar ? (
-                            <img
-                                src={card.assignee.avatar}
-                                alt={card.assignee.name}
-                                className="w-5 h-5 rounded-full"
-                            />
-                        ) : (
-                            <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center text-[10px] font-medium text-accent">
-                                {card.assignee.name.charAt(0).toUpperCase()}
-                            </div>
-                        )}
+            >
+                {/* Labels */}
+                {card.labels && card.labels.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-2">
+                        {card.labels.map((label, i) => (
+                            <span
+                                key={i}
+                                className="text-[10px] px-2 py-0.5 rounded-full font-medium"
+                                style={{ backgroundColor: label.color + '30', color: label.color }}
+                            >
+                                {label.text}
+                            </span>
+                        ))}
                     </div>
                 )}
-            </div>
 
+                {/* Title */}
+                <h4 className="text-sm font-medium text-white mb-1 group-hover:text-accent transition-colors">
+                    {card.title}
+                </h4>
 
-        </motion.div>
+                {/* Description */}
+                {card.description && (
+                    <p className="text-xs text-gray-500 line-clamp-2 mb-2">
+                        {card.description}
+                    </p>
+                )}
+
+                {/* Footer */}
+                <div className="flex items-center justify-between mt-2">
+                    {/* Priority */}
+                    {card.priority && (
+                        <span className={cn(
+                            "text-[10px] px-2 py-0.5 rounded border font-medium uppercase",
+                            priorityColors[card.priority]
+                        )}>
+                            {card.priority}
+                        </span>
+                    )}
+
+                    {/* Due Date */}
+                    {card.dueDate && (
+                        <span className="text-[10px] text-gray-500">
+                            {card.dueDate}
+                        </span>
+                    )}
+
+                    {/* Assignee */}
+                    {card.assignee && (
+                        <div className="flex items-center gap-1">
+                            {card.assignee.avatar ? (
+                                <img
+                                    src={card.assignee.avatar}
+                                    alt={card.assignee.name}
+                                    className="w-5 h-5 rounded-full"
+                                />
+                            ) : (
+                                <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center text-[10px] font-medium text-accent">
+                                    {card.assignee.name.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </motion.div>
+        </div>
     );
 };
 
-// Column Component
+// Column Component with drop zone
 const Column = ({
     column,
     onCardClick,
     onAddCard,
-    onCardsReorder,
     onCardDrop,
-    draggedCard,
-    setDraggedCard,
+    draggedCardId,
+    onDragStart,
 }: {
     column: KanbanColumn;
     onCardClick?: (card: KanbanCard) => void;
     onAddCard?: () => void;
-    onCardsReorder: (cards: KanbanCard[]) => void;
-    onCardDrop: (card: KanbanCard, targetColumnId: string) => void;
-    draggedCard: { card: KanbanCard; sourceColumnId: string } | null;
-    setDraggedCard: (data: { card: KanbanCard; sourceColumnId: string } | null) => void;
+    onCardDrop: (sourceColumnId: string, targetColumnId: string, cardId: string) => void;
+    draggedCardId: string | null;
+    onDragStart: (e: React.DragEvent, card: KanbanCard, columnId: string) => void;
 }) => {
     const isOverLimit = column.wipLimit ? column.cards.length >= column.wipLimit : false;
     const [isDragOver, setIsDragOver] = useState(false);
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
         setIsDragOver(true);
     };
 
-    const handleDragLeave = () => {
-        setIsDragOver(false);
+    const handleDragLeave = (e: React.DragEvent) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
+        if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+            setIsDragOver(false);
+        }
     };
 
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragOver(false);
-        if (draggedCard && draggedCard.sourceColumnId !== column.id) {
-            onCardDrop(draggedCard.card, column.id);
+
+        try {
+            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+            if (data.sourceColumnId !== column.id) {
+                onCardDrop(data.sourceColumnId, column.id, data.cardId);
+            }
+        } catch (err) {
+            console.error('Drop error:', err);
         }
     };
 
     return (
         <div
             className={cn(
-                "flex-shrink-0 w-72 bg-white/[0.02] rounded-xl border border-white/10 flex flex-col max-h-full",
-                isDragOver && "border-accent/50 bg-accent/5"
+                "flex-shrink-0 w-72 bg-white/[0.02] rounded-xl border-2 flex flex-col max-h-full transition-all duration-200",
+                isDragOver
+                    ? "border-accent bg-accent/5 shadow-[0_0_20px_rgba(139,92,246,0.2)]"
+                    : "border-white/10"
             )}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -202,30 +225,30 @@ const Column = ({
             </div>
 
             {/* Cards Container */}
-            <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-hide">
-                <Reorder.Group
-                    axis="y"
-                    values={column.cards}
-                    onReorder={onCardsReorder}
-                    className="space-y-2"
-                >
-                    <AnimatePresence>
-                        {column.cards.map((card) => (
-                            <Reorder.Item
-                                key={card.id}
-                                value={card}
-                                draggable
-                                onDragStart={() => setDraggedCard({ card, sourceColumnId: column.id })}
-                                onDragEnd={() => setDraggedCard(null)}
-                            >
-                                <Card
-                                    card={card}
-                                    onClick={() => onCardClick?.(card)}
-                                />
-                            </Reorder.Item>
-                        ))}
-                    </AnimatePresence>
-                </Reorder.Group>
+            <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-hide min-h-[100px]">
+                <AnimatePresence>
+                    {column.cards.map((card) => (
+                        <Card
+                            key={card.id}
+                            card={card}
+                            columnId={column.id}
+                            onClick={() => onCardClick?.(card)}
+                            onDragStart={onDragStart}
+                            isDragging={draggedCardId === card.id}
+                        />
+                    ))}
+                </AnimatePresence>
+
+                {/* Drop zone indicator when dragging */}
+                {isDragOver && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 60 }}
+                        className="border-2 border-dashed border-accent/50 rounded-lg bg-accent/10 flex items-center justify-center"
+                    >
+                        <span className="text-xs text-accent">Drop here</span>
+                    </motion.div>
+                )}
             </div>
 
             {/* Add Card Button */}
@@ -257,7 +280,7 @@ export const KanbanBoard = ({
     className,
 }: KanbanBoardProps) => {
     const [columns, setColumns] = useState<KanbanColumn[]>(initialColumns);
-    const [draggedCard, setDraggedCard] = useState<{ card: KanbanCard; sourceColumnId: string } | null>(null);
+    const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
     const [filterText, setFilterText] = useState('');
     const [sortBy, setSortBy] = useState<'none' | 'priority' | 'date'>('none');
 
@@ -267,21 +290,23 @@ export const KanbanBoard = ({
         onColumnsChange?.(newColumns);
     }, [onColumnsChange]);
 
-    // Handle card reorder within same column
-    const handleCardsReorder = useCallback((columnId: string, newCards: KanbanCard[]) => {
-        const newColumns = columns.map(col =>
-            col.id === columnId ? { ...col, cards: newCards } : col
-        );
-        updateColumns(newColumns);
-    }, [columns, updateColumns]);
+    // Handle card drag start
+    const handleDragStart = useCallback((e: React.DragEvent, card: KanbanCard, columnId: string) => {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', JSON.stringify({ cardId: card.id, sourceColumnId: columnId }));
+        setDraggedCardId(card.id);
+    }, []);
 
     // Handle card drop to different column
-    const handleCardDrop = useCallback((card: KanbanCard, targetColumnId: string) => {
-        if (!draggedCard) return;
+    const handleCardDrop = useCallback((sourceColumnId: string, targetColumnId: string, cardId: string) => {
+        const sourceColumn = columns.find(c => c.id === sourceColumnId);
+        const card = sourceColumn?.cards.find(c => c.id === cardId);
+
+        if (!card) return;
 
         const newColumns = columns.map(col => {
-            if (col.id === draggedCard.sourceColumnId) {
-                return { ...col, cards: col.cards.filter(c => c.id !== card.id) };
+            if (col.id === sourceColumnId) {
+                return { ...col, cards: col.cards.filter(c => c.id !== cardId) };
             }
             if (col.id === targetColumnId) {
                 return { ...col, cards: [...col.cards, card] };
@@ -290,8 +315,13 @@ export const KanbanBoard = ({
         });
 
         updateColumns(newColumns);
-        setDraggedCard(null);
-    }, [columns, draggedCard, updateColumns]);
+        setDraggedCardId(null);
+    }, [columns, updateColumns]);
+
+    // Handle drag end (cleanup)
+    const handleDragEnd = useCallback(() => {
+        setDraggedCardId(null);
+    }, []);
 
     // Filter and sort cards
     const getProcessedColumns = useCallback(() => {
@@ -327,7 +357,10 @@ export const KanbanBoard = ({
     const processedColumns = getProcessedColumns();
 
     return (
-        <div className={cn("flex flex-col h-full", className)}>
+        <div
+            className={cn("flex flex-col h-full", className)}
+            onDragEnd={handleDragEnd}
+        >
             {/* Toolbar */}
             <div className="flex items-center gap-4 mb-4 px-2">
                 {/* Filter */}
@@ -347,7 +380,7 @@ export const KanbanBoard = ({
                     <ArrowUpDown className="w-4 h-4 text-gray-500" />
                     <select
                         value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value as any)}
+                        onChange={(e) => setSortBy(e.target.value as 'none' | 'priority' | 'date')}
                         className="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-accent/50"
                     >
                         <option value="none">No sorting</option>
@@ -366,10 +399,9 @@ export const KanbanBoard = ({
                             column={column}
                             onCardClick={(card) => onCardClick?.(card, column.id)}
                             onAddCard={() => onAddCard?.(column.id)}
-                            onCardsReorder={(cards) => handleCardsReorder(column.id, cards)}
                             onCardDrop={handleCardDrop}
-                            draggedCard={draggedCard}
-                            setDraggedCard={setDraggedCard}
+                            draggedCardId={draggedCardId}
+                            onDragStart={handleDragStart}
                         />
                     ))}
 
