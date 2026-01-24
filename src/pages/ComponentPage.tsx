@@ -549,9 +549,9 @@ export const ComponentPage = () => {
                                                 <div className="w-full h-[400px] sm:h-[500px] lg:h-[600px] relative overflow-hidden rounded-xl border border-white/10">
                                                     <LiquidGradientMesh
                                                         colors={['#83f65cff', '#c5dbffff', '#000000ff', '#ebd71bff']}
-                                                        speed={1.5}
-                                                        complexity={14}
-                                                        blur={20}
+                                                        speed={1}
+                                                        complexity={3}
+                                                        blur={40}
                                                         interactive
                                                     >
                                                         <div className="flex flex-col items-center justify-center h-full pointer-events-none p-4 text-center">
