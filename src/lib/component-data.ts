@@ -2300,5 +2300,179 @@ export const DataTableDemo = () => (
     />
   </div>
 );`
+    },
+    'comparison-table': {
+        id: 'comparison-table',
+        name: 'Comparison Table',
+        description: 'Pricing and feature comparison table with sticky headers, recommended plan highlighting, and check/cross indicators.',
+        dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
+        category: 'Components',
+        code: `import React, { useState } from 'react';
+import { Check, X, Info, HelpCircle } from 'lucide-react';
+import { cn } from '../lib/utils';
+
+export interface Plan {
+  id: string;
+  name: string;
+  price: string;
+  period?: string;
+  description?: string;
+  isRecommended?: boolean;
+  buttonText?: string;
+  onAction?: () => void;
+}
+
+export interface Feature {
+  id: string;
+  name: string;
+  helpText?: string;
+  category?: string;
+}
+
+export interface ComparisonData {
+  [featureId: string]: {
+    [planId: string]: boolean | string | React.ReactNode;
+  };
+}
+
+export interface ComparisonTableProps {
+  plans: Plan[];
+  features: Feature[];
+  data: ComparisonData;
+  className?: string;
+}
+
+export const ComparisonTable = ({ plans, features, data, className }: ComparisonTableProps) => {
+  const featuresByCategory = features.reduce((acc, feature) => {
+    const category = feature.category || 'General';
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(feature);
+    return acc;
+  }, {} as Record<string, Feature[]>);
+
+  const categories = Object.keys(featuresByCategory);
+
+  return (
+    <div className={cn("w-full overflow-hidden rounded-2xl border border-white/10 bg-black/20 backdrop-blur-xl", className)}>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse min-w-[800px]">
+          <thead>
+            <tr>
+              <th className="p-6 text-left w-1/4 min-w-[200px] border-b border-white/10 bg-black/40 backdrop-blur-md sticky left-0 z-20">
+                <span className="text-xl font-bold text-white">Compare Plans</span>
+              </th>
+              {plans.map((plan) => (
+                <th 
+                  key={plan.id} 
+                  className={cn(
+                    "p-6 text-left align-top border-b border-white/10 min-w-[200px] relative",
+                    plan.isRecommended ? "bg-accent/5" : "bg-transparent"
+                  )}
+                >
+                  {plan.isRecommended && (
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-accent text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-b-lg shadow-lg shadow-accent/20">
+                      Recommended
+                    </div>
+                  )}
+                  <div className="space-y-4 relative z-10 pt-2">
+                    <div>
+                      <h3 className={cn("text-lg font-bold mb-1", plan.isRecommended ? "text-accent" : "text-white")}>
+                        {plan.name}
+                      </h3>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl font-bold text-white">{plan.price}</span>
+                        {plan.period && <span className="text-sm text-gray-400 font-normal">{plan.period}</span>}
+                      </div>
+                      {plan.description && <p className="text-sm text-gray-400 mt-2">{plan.description}</p>}
+                    </div>
+                    <button 
+                      onClick={plan.onAction}
+                      className={cn(
+                        "w-full py-2.5 rounded-lg text-sm font-semibold transition-all duration-200",
+                        plan.isRecommended 
+                          ? "bg-accent text-white hover:bg-accent/90" 
+                          : "bg-white/10 text-white hover:bg-white/20"
+                      )}
+                    >
+                      {plan.buttonText || "Choose Plan"}
+                    </button>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {categories.map((category) => (
+              <React.Fragment key={category}>
+                {category !== 'General' && (
+                  <tr>
+                    <td colSpan={plans.length + 1} className="p-4 bg-white/5 font-semibold text-gray-300 sticky left-0 z-10">
+                      {category}
+                    </td>
+                  </tr>
+                )}
+                {featuresByCategory[category].map((feature) => (
+                  <tr key={feature.id} className="group hover:bg-white/[0.02] transition-colors">
+                    <td className="p-4 text-sm text-gray-300 border-r border-white/5 sticky left-0 z-10 bg-black/20 backdrop-blur-sm group-hover:bg-white/[0.02] transition-colors">
+                      <div className="flex items-center gap-2">
+                        <span>{feature.name}</span>
+                        {feature.helpText && (
+                          <div className="group/tooltip relative">
+                            <HelpCircle className="w-3.5 h-3.5 text-gray-500 hover:text-gray-300 cursor-help" />
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    {plans.map((plan) => (
+                       <td key={plan.id} className={cn(
+                         "p-4 text-sm text-center border-r border-white/5 last:border-0",
+                         plan.isRecommended && "bg-accent/[0.02]"
+                       )}>
+                         {/* Render value logic... */}
+                       </td>
+                    ))}
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+function Minus(props: any) {
+  return (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/></svg>
+  );
+}`,
+        usage: `import { ComparisonTable, Plan, Feature, ComparisonData } from '@/components/ComparisonTable';
+
+const plans: Plan[] = [
+    { id: 'starter', name: 'Starter', price: '$0', period: '/mo', description: 'For individuals just getting started.' },
+    { id: 'pro', name: 'Pro', price: '$29', period: '/mo', description: 'For professional developers.', isRecommended: true },
+    { id: 'team', name: 'Team', price: '$99', period: '/mo', description: 'For growing teams.' }
+];
+
+const features: Feature[] = [
+    { id: 'users', name: 'Users', category: 'General' },
+    { id: 'projects', name: 'Projects', category: 'General' },
+    { id: 'analytics', name: 'Analytics', category: 'Features' },
+    { id: 'support', name: 'Support', category: 'Support' },
+];
+
+const data: ComparisonData = {
+    users: { starter: '1 User', pro: '5 Users', team: 'Unlimited' },
+    projects: { starter: '3 Projects', pro: 'Unlimited', team: 'Unlimited' },
+    analytics: { starter: false, pro: true, team: true },
+    support: { starter: 'Community', pro: 'Email', team: '24/7 Priority' }
+};
+
+export const PricingDemo = () => (
+    <div className="p-8">
+        <ComparisonTable plans={plans} features={features} data={data} />
+    </div>
+);`
     }
 };

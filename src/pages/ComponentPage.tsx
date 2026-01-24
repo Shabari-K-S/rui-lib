@@ -22,6 +22,7 @@ import { FileUploadZone } from '../components/FileUploadZone';
 import { Calendar as CalendarComponent } from '../components/Calendar';
 import { StatCard } from '../components/StatCard';
 import { DataTable } from '../components/DataTable';
+import { ComparisonTable } from '../components/ComparisonTable';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -689,6 +690,33 @@ export const ComponentPage = () => {
                                                         rowsPerPage={5}
                                                     />
                                                 </div>
+
+                                            )}
+
+                                            {activeId === 'comparison-table' && (
+                                                <div className="w-full">
+                                                    <ComparisonTable
+                                                        plans={[
+                                                            { id: 'free', name: 'Free', price: '$0', period: '/mo', description: 'For hobbyists.', buttonText: 'Get Started' },
+                                                            { id: 'pro', name: 'Pro', price: '$29', period: '/mo', description: 'For pros.', isRecommended: true, buttonText: 'Upgrade' },
+                                                            { id: 'team', name: 'Team', price: '$99', period: '/mo', description: 'For teams.', buttonText: 'Contact Sales' }
+                                                        ]}
+                                                        features={[
+                                                            { id: 'users', name: 'Users', category: 'General' },
+                                                            { id: 'storage', name: 'Storage', category: 'General' },
+                                                            { id: 'analytics', name: 'Analytics', category: 'Features' },
+                                                            { id: 'api', name: 'API Access', category: 'Features' },
+                                                            { id: 'support', name: 'Support', category: 'Support' }
+                                                        ]}
+                                                        data={{
+                                                            users: { free: '1', pro: '5', team: 'Unlimited' },
+                                                            storage: { free: '1GB', pro: '10GB', team: '1TB' },
+                                                            analytics: { free: false, pro: true, team: true },
+                                                            api: { free: false, pro: 'Basic', team: 'Unlimited' },
+                                                            support: { free: 'Community', pro: 'Email', team: '24/7 Priority' }
+                                                        }}
+                                                    />
+                                                </div>
                                             )}
                                         </div>
                                     </div>
@@ -720,29 +748,32 @@ export const ComponentPage = () => {
 
                             </div>
                         </div>
-                    )}
-                </main>
+                    )
+                    }
+                </main >
 
                 {/* Right Sidebar - On this page */}
-                {!isDocsPage && (
-                    <aside className="w-64 flex-shrink-0 hidden xl:block h-full overflow-y-auto pb-12">
-                        <h5 className="text-sm font-semibold text-white mb-4">On This Page</h5>
-                        <ul className="space-y-2 text-sm">
-                            {sections.map(section => (
-                                <li key={section.id}>
-                                    <a
-                                        href={`#${section.id}`}
-                                        className="block text-left text-gray-500 hover:text-white transition-colors"
-                                    >
-                                        {section.label}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </aside>
-                )}
+                {
+                    !isDocsPage && (
+                        <aside className="w-64 flex-shrink-0 hidden xl:block h-full overflow-y-auto pb-12">
+                            <h5 className="text-sm font-semibold text-white mb-4">On This Page</h5>
+                            <ul className="space-y-2 text-sm">
+                                {sections.map(section => (
+                                    <li key={section.id}>
+                                        <a
+                                            href={`#${section.id}`}
+                                            className="block text-left text-gray-500 hover:text-white transition-colors"
+                                        >
+                                            {section.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </aside>
+                    )
+                }
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
