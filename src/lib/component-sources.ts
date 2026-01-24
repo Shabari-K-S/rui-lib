@@ -29,6 +29,7 @@ import StepperSource from '../components/Stepper.tsx?raw';
 import ConfettiSource from '../components/Confetti.tsx?raw';
 import MegaMenuSource from '../components/MegaMenu.tsx?raw';
 import LiquidGradientMeshSource from '../components/LiquidGradientMesh.tsx?raw';
+import HolographicFoilSource from '../components/DigitalMatrix.tsx?raw';
 
 // Map component IDs to their full source code
 export const COMPONENT_SOURCES: Record<string, string> = {
@@ -60,4 +61,5 @@ export const COMPONENT_SOURCES: Record<string, string> = {
     'confetti': ConfettiSource,
     'mega-menu': MegaMenuSource,
     'liquid-gradient-mesh': LiquidGradientMeshSource,
+    'digital-matrix': HolographicFoilSource,
 };

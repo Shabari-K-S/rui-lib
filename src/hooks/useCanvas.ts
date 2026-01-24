@@ -1,4 +1,4 @@
-import { useRef, useEffect, type RefObject } from 'react';
+import { useRef, useEffect, useState, type RefObject } from 'react';
 
 interface UseCanvasOptions {
     onResize?: (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => void;
@@ -11,17 +11,17 @@ interface UseCanvasOptions {
  */
 export const useCanvas = (options: UseCanvasOptions = {}): [RefObject<HTMLCanvasElement | null>, CanvasRenderingContext2D | null] => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+    const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
     const { onResize, devicePixelRatio = true } = options;
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext('2d', { alpha: true });
-        if (!ctx) return;
+        const context = canvas.getContext('2d', { alpha: true });
+        if (!context) return;
 
-        ctxRef.current = ctx;
+        setCtx(context);
 
         const handleResize = () => {
             const parent = canvas.parentElement;
@@ -35,10 +35,12 @@ export const useCanvas = (options: UseCanvasOptions = {}): [RefObject<HTMLCanvas
             canvas.style.width = `${rect.width}px`;
             canvas.style.height = `${rect.height}px`;
 
-            ctx.scale(dpr, dpr);
+            // Reset and re-scale after resize
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.scale(dpr, dpr);
 
             if (onResize) {
-                onResize(canvas, ctx);
+                onResize(canvas, context);
             }
         };
 
@@ -52,5 +54,5 @@ export const useCanvas = (options: UseCanvasOptions = {}): [RefObject<HTMLCanvas
         };
     }, [onResize, devicePixelRatio]);
 
-    return [canvasRef, ctxRef.current];
+    return [canvasRef, ctx];
 };

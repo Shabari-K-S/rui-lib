@@ -2914,5 +2914,14 @@ const menuSections: MegaMenuSection[] = [
         category: 'Backgrounds',
         code: 'import React, { useEffect, useRef, useCallback } from \'react\';\nimport { cn } from \'../lib/utils\';\nimport { useReducedMotion } from \'../hooks/useReducedMotion\';\n\nexport interface LiquidGradientMeshProps {\n    children?: React.ReactNode;\n    className?: string;\n    colors?: string[];\n    speed?: number;\n    complexity?: number;\n    blur?: number;\n    interactive?: boolean;\n}\n\n// Full implementation in src/components/LiquidGradientMesh.tsx\n// This component uses Perlin noise for organic blob movement,\n// Canvas 2D with screen blend mode for color mixing,\n// and mouse interaction for responsive effects.\n\nexport const LiquidGradientMesh = (props: LiquidGradientMeshProps) => {\n    // See full implementation in source file\n    return <div>Liquid Gradient Mesh Background</div>;\n};',
         usage: 'import { LiquidGradientMesh } from \'@/components/LiquidGradientMesh\';\n\nexport const HeroSection = () => (\n    <div className=\"h-screen w-full\">\n        <LiquidGradientMesh\n            colors={[\'#8B5CF6\', \'#3B82F6\', \'#EC4899\', \'#10B981\']}\n            speed={1}\n            complexity={3}\n            blur={60}\n            interactive\n        >\n            <div className=\"flex items-center justify-center h-full\">\n                <h1 className=\"text-white text-6xl font-bold\">Welcome</h1>\n            </div>\n        </LiquidGradientMesh>\n    </div>\n);'
+    },
+    'digital-matrix': {
+        id: 'digital-matrix',
+        name: 'Digital Matrix',
+        description: 'Animated matrix-style background with random characters, wave distortion, and scanlines inspired by Midjourney.',
+        dependencies: 'npm install clsx tailwind-merge',
+        category: 'Backgrounds',
+        code: '// See full implementation in src/components/DigitalMatrix.tsx',
+        usage: 'import { DigitalMatrix } from \'@/components/DigitalMatrix\';\n\nexport const HeroSection = () => (\n    <div className=\"h-screen w-full\">\n        <DigitalMatrix\n            color=\"#4a9eff\"\n            secondaryColor=\"#7c3aed\"\n            density={0.65}\n            speed={0.8}\n            wave={true}\n            scanlineOpacity={0.15}\n        >\n            <div className=\"flex items-center justify-center h-full\">\n                <h1 className=\"text-white text-6xl font-bold\">Welcome</h1>\n            </div>\n        </DigitalMatrix>\n    </div>\n);'
     }
 };
