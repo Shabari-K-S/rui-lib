@@ -2784,5 +2784,34 @@ export const StepperDemo = () => {
     currentStep={1} 
     orientation="vertical" 
 />`
+    },
+    'confetti': {
+        id: 'confetti',
+        name: 'Confetti',
+        description: 'High-performance canvas-based confetti explosion effect.',
+        dependencies: 'No external dependencies',
+        category: 'Components',
+        code: `import { triggerConfetti } from '@/components/Confetti';
+
+export const ConfettiDemo = () => (
+  <button 
+    onClick={() => triggerConfetti()}
+    className="px-4 py-2 bg-gradient-to-r from-pink-500 to-violet-500 rounded-full text-white font-bold"
+  >
+    Celebrate! 🎉
+  </button>
+);`,
+        usage: `import { triggerConfetti } from '@/components/Confetti';
+
+// Simple burst
+triggerConfetti();
+
+// Custom burst
+triggerConfetti({
+  particleCount: 100,
+  spread: 70,
+  origin: { y: 0.6 },
+  colors: ['#bb0000', '#ffffff']
+});`
     }
 };

@@ -26,6 +26,7 @@ import { TreeView } from '../components/TreeView';
 import { useToast } from '../components/Toast';
 import { Skeleton, SkeletonCard, SkeletonProfile, SkeletonRow } from '../components/Skeleton';
 import { EmptyState } from '../components/EmptyState';
+import { triggerConfetti } from '../components/Confetti';
 import { Stepper } from '../components/Stepper';
 import { DataTable } from '../components/DataTable';
 import { ComparisonTable } from '../components/ComparisonTable';
@@ -54,6 +55,12 @@ export const ComponentPage = () => {
                 setStepperValue((prev) => {
                     if (prev >= 3) {
                         setIsStepperPlaying(false);
+                        triggerConfetti({
+                            particleCount: 100,
+                            spread: 70,
+                            x: 0.5,
+                            y: 0.6
+                        });
                         return 0;
                     }
                     return prev + 1;
@@ -1009,6 +1016,58 @@ export const ComponentPage = () => {
                                                                 ]}
                                                             />
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {activeId === 'confetti' && (
+                                                <div className="flex flex-col items-center justify-center gap-8 py-20">
+                                                    <div className="text-center space-y-4">
+                                                        <h3 className="text-2xl font-bold text-white">Celebration Time!</h3>
+                                                        <p className="text-gray-400">Click the buttons below to trigger confetti.</p>
+                                                    </div>
+
+                                                    <div className="flex flex-wrap gap-4 justify-center">
+                                                        <button
+                                                            onClick={() => triggerConfetti()}
+                                                            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full text-white font-bold hover:scale-105 transition-transform shadow-lg shadow-blue-500/25"
+                                                        >
+                                                            Simple Burst 🎉
+                                                        </button>
+                                                        <button
+                                                            onClick={() => triggerConfetti({
+                                                                particleCount: 100,
+                                                                spread: 100,
+                                                                colors: ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#d946ef', '#f43f5e']
+                                                            })}
+                                                            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white font-bold hover:scale-105 transition-transform shadow-lg shadow-purple-500/25"
+                                                        >
+                                                            Rainbow Explosion 🌈
+                                                        </button>
+                                                        <button
+                                                            onClick={() => triggerConfetti({
+                                                                particleCount: 50,
+                                                                angle: 60,
+                                                                spread: 55,
+                                                                x: 0,
+                                                                y: 0.8
+                                                            })}
+                                                            className="px-6 py-3 bg-white/10 border border-white/10 rounded-full text-white font-bold hover:bg-white/20 transition-colors"
+                                                        >
+                                                            Left Cannon ⬅️
+                                                        </button>
+                                                        <button
+                                                            onClick={() => triggerConfetti({
+                                                                particleCount: 50,
+                                                                angle: 120,
+                                                                spread: 55,
+                                                                x: 1,
+                                                                y: 0.8
+                                                            })}
+                                                            className="px-6 py-3 bg-white/10 border border-white/10 rounded-full text-white font-bold hover:bg-white/20 transition-colors"
+                                                        >
+                                                            Right Cannon ➡️
+                                                        </button>
                                                     </div>
                                                 </div>
                                             )}
