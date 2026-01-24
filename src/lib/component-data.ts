@@ -2474,5 +2474,83 @@ export const PricingDemo = () => (
         <ComparisonTable plans={plans} features={features} data={data} />
     </div>
 );`
+    },
+    'charts': {
+        id: 'charts',
+        name: 'Neon Charts',
+        description: 'High-performance charts with unique neon glows, glassmorphism effects, and custom animations.',
+        dependencies: 'npm install recharts framer-motion clsx tailwind-merge',
+        category: 'Components',
+        code: `import React from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+export const NeonLineChart = ({ data, color = "#8B5CF6" }) => (
+  <div className="p-6 rounded-2xl bg-black/20 border border-white/5 backdrop-blur-sm">
+    <ResponsiveContainer width="100%" height={300}>
+      <AreaChart data={data}>
+        <defs>
+            <linearGradient id="colorGlow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={color} stopOpacity={0.5} />
+                <stop offset="95%" stopColor={color} stopOpacity={0} />
+            </linearGradient>
+            <filter id="glow" height="300%" width="300%" x="-75%" y="-75%">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                </feMerge>
+            </filter>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+        <XAxis dataKey="name" stroke="#666" />
+        <YAxis stroke="#666" />
+        <Tooltip contentStyle={{ backgroundColor: '#000000cc', borderColor: '#ffffff20' }} />
+        <Area 
+            type="monotone" 
+            dataKey="value" 
+            stroke={color} 
+            fill="url(#colorGlow)" 
+            filter="url(#glow)" 
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  </div>
+);`,
+        usage: `import { NeonLineChart, GlassBarChart, HoloPieChart } from '@/components/Charts';
+
+const data = [
+    { name: 'Jan', value: 400 },
+    { name: 'Feb', value: 300 },
+    { name: 'Mar', value: 600 },
+    { name: 'Apr', value: 800 },
+    { name: 'May', value: 500 },
+    { name: 'Jun', value: 700 },
+];
+
+export const ChartsDemo = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <NeonLineChart 
+            title="User Growth" 
+            description="Monthly active users" 
+            data={data} 
+            color="#ec4899" 
+        />
+        <GlassBarChart 
+            title="Revenue" 
+            description="Monthly revenue in K" 
+            data={data} 
+            color="#10B981" 
+        />
+        <HoloPieChart 
+            title="Device Usage" 
+            description="Traffic by device type" 
+            data={[
+                { name: 'Mobile', value: 400 },
+                { name: 'Desktop', value: 300 },
+                { name: 'Tablet', value: 100 },
+            ]} 
+        />
+    </div>
+);`
     }
 };

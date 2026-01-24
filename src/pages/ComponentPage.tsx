@@ -21,6 +21,7 @@ import { KanbanBoard } from '../components/KanbanBoard';
 import { FileUploadZone } from '../components/FileUploadZone';
 import { Calendar as CalendarComponent } from '../components/Calendar';
 import { StatCard } from '../components/StatCard';
+import { NeonLineChart, GlassBarChart, HoloPieChart } from '../components/Charts';
 import { DataTable } from '../components/DataTable';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { Menu, X } from 'lucide-react';
@@ -715,6 +716,49 @@ export const ComponentPage = () => {
                                                             api: { free: false, pro: 'Basic', team: 'Unlimited' },
                                                             support: { free: 'Community', pro: 'Email', team: '24/7 Priority' }
                                                         }}
+                                                    />
+                                                </div>
+
+                                            )}
+
+                                            {activeId === 'charts' && (
+                                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full p-4">
+                                                    <NeonLineChart
+                                                        title="User Growth"
+                                                        description="Monthly active users"
+                                                        data={[
+                                                            { name: 'Jan', value: 400 },
+                                                            { name: 'Feb', value: 300 },
+                                                            { name: 'Mar', value: 600 },
+                                                            { name: 'Apr', value: 800 },
+                                                            { name: 'May', value: 500 },
+                                                            { name: 'Jun', value: 700 },
+                                                        ]}
+                                                        color="#ec4899"
+                                                        className="col-span-1 lg:col-span-2"
+                                                    />
+                                                    <GlassBarChart
+                                                        title="Revenue"
+                                                        description="Monthly revenue in K"
+                                                        data={[
+                                                            { name: 'Jan', value: 400 },
+                                                            { name: 'Feb', value: 300 },
+                                                            { name: 'Mar', value: 600 },
+                                                            { name: 'Apr', value: 800 },
+                                                            { name: 'May', value: 500 },
+                                                            { name: 'Jun', value: 700 },
+                                                        ]}
+                                                        color="#10B981"
+                                                    />
+                                                    <HoloPieChart
+                                                        title="Device Usage"
+                                                        description="Traffic by device type"
+                                                        data={[
+                                                            { name: 'Mobile', value: 400 },
+                                                            { name: 'Desktop', value: 300 },
+                                                            { name: 'Tablet', value: 100 },
+                                                            { name: 'Other', value: 50 },
+                                                        ]}
                                                     />
                                                 </div>
                                             )}
