@@ -21,6 +21,7 @@ import { KanbanBoard } from '../components/KanbanBoard';
 import { FileUploadZone } from '../components/FileUploadZone';
 import { Calendar as CalendarComponent } from '../components/Calendar';
 import { StatCard } from '../components/StatCard';
+import { DataTable } from '../components/DataTable';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -648,6 +649,44 @@ export const ComponentPage = () => {
                                                         color="yellow"
                                                         icon={<ShoppingCart />}
                                                         className="md:col-span-1"
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {activeId === 'data-table' && (
+                                                <div className="w-full p-4 overflow-x-auto">
+                                                    <DataTable
+                                                        columns={[
+                                                            { key: 'name', label: 'Name', sortable: true },
+                                                            { key: 'role', label: 'Role', sortable: true },
+                                                            {
+                                                                key: 'status',
+                                                                label: 'Status',
+                                                                sortable: true,
+                                                                render: (value: any) => (
+                                                                    <span className={cn(
+                                                                        "px-2 py-1 rounded-full text-xs font-medium",
+                                                                        value === 'Active' ? "bg-green-500/10 text-green-500" :
+                                                                            value === 'Inactive' ? "bg-gray-500/10 text-gray-500" :
+                                                                                "bg-yellow-500/10 text-yellow-500"
+                                                                    )}>
+                                                                        {value}
+                                                                    </span>
+                                                                )
+                                                            },
+                                                            { key: 'lastLogin', label: 'Last Login', sortable: true },
+                                                        ]}
+                                                        data={[
+                                                            { id: 1, name: 'John Doe', role: 'Admin', status: 'Active', lastLogin: '2024-03-10' },
+                                                            { id: 2, name: 'Jane Smith', role: 'Member', status: 'Inactive', lastLogin: '2024-03-08' },
+                                                            { id: 3, name: 'Bob Johnson', role: 'Editor', status: 'Active', lastLogin: '2024-03-09' },
+                                                            { id: 4, name: 'Alice Brown', role: 'Member', status: 'Pending', lastLogin: '2024-03-05' },
+                                                            { id: 5, name: 'Charlie Wilson', role: 'Admin', status: 'Active', lastLogin: '2024-03-11' },
+                                                            { id: 6, name: 'Diana Prince', role: 'Member', status: 'Active', lastLogin: '2024-03-01' },
+                                                            { id: 7, name: 'Evan Wright', role: 'Editor', status: 'Inactive', lastLogin: '2024-02-28' },
+                                                        ]}
+                                                        title="Team Members"
+                                                        rowsPerPage={5}
                                                     />
                                                 </div>
                                             )}
