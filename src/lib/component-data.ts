@@ -2681,5 +2681,46 @@ export const SkeletonDemo = () => (
 // Presets
 <SkeletonProfile />
 <SkeletonCard />`
+    },
+    'empty-state': {
+        id: 'empty-state',
+        name: 'Empty State',
+        description: 'Placeholder illustrations for empty data sets, errors, or search results.',
+        dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
+        category: 'Components',
+        code: `import { EmptyState } from '@/components/EmptyState';
+
+export const EmptyStateDemo = () => (
+  <EmptyState
+    title="No projects found"
+    description="Get started by creating a new project or try adjusting your search."
+    action={{
+        label: "Create Project",
+        onClick: () => console.log('Create clicked')
+    }}
+  />
+);`,
+        usage: `import { EmptyState } from '@/components/EmptyState';
+
+// Default variant
+<EmptyState
+  title="No items"
+  description="Add an item to get started"
+  action={{ label: "Add Item", onClick: handleAdd }}
+/>
+
+// Search variant
+<EmptyState
+  variant="search"
+  title="No results found"
+  description="Try adjusting your filters"
+/>
+
+// Error variant
+<EmptyState
+  variant="error"
+  title="Something went wrong"
+  description="Please try again later"
+/>`
     }
 };

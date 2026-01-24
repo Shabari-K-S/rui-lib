@@ -25,6 +25,7 @@ import { NeonLineChart, GlassBarChart, HoloPieChart } from '../components/Charts
 import { TreeView } from '../components/TreeView';
 import { useToast } from '../components/Toast';
 import { Skeleton, SkeletonCard, SkeletonProfile, SkeletonRow } from '../components/Skeleton';
+import { EmptyState } from '../components/EmptyState';
 import { DataTable } from '../components/DataTable';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { Menu, X, FileCode, Image as ImageIcon } from 'lucide-react';
@@ -884,6 +885,38 @@ export const ComponentPage = () => {
                                                             <SkeletonRow />
                                                         </div>
                                                     </div>
+                                                </div>
+                                            )}
+
+                                            {activeId === 'empty-state' && (
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto p-4">
+                                                    <EmptyState
+                                                        title="No projects found"
+                                                        description="Get started by creating a new project or try adjusting your search."
+                                                        action={{
+                                                            label: "Create Project",
+                                                            onClick: () => toast({ title: "Action Clicked", description: "Create Project button clicked", type: "success" })
+                                                        }}
+                                                    />
+                                                    <EmptyState
+                                                        variant="search"
+                                                        title="No results found"
+                                                        description="We couldn't find any items matching your search criteria."
+                                                    />
+                                                    <EmptyState
+                                                        variant="error"
+                                                        title="Connection Lost"
+                                                        description="Please check your internet connection and try again."
+                                                        action={{
+                                                            label: "Retry Connection",
+                                                            onClick: () => toast({ title: "Retrying...", description: "Attempting to reconnect.", type: "info" })
+                                                        }}
+                                                    />
+                                                    <EmptyState
+                                                        variant="folder"
+                                                        title="Empty Folder"
+                                                        description="This folder does not contain any files yet."
+                                                    />
                                                 </div>
                                             )}
                                         </div>
