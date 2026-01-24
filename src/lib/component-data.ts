@@ -2552,5 +2552,74 @@ export const ChartsDemo = () => (
         />
     </div>
 );`
+    },
+    'tree-view': {
+        id: 'tree-view',
+        name: 'Tree View',
+        description: 'Hierarchical list component with expandable nodes, custom icons, and smooth animations.',
+        dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
+        category: 'Components',
+        code: `import React, { useState } from 'react';
+import { ChevronRight, Folder, FolderOpen, FileText } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../lib/utils';
+
+export interface TreeNode {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  children?: TreeNode[];
+  meta?: string;
+}
+
+export const TreeView = ({ data, onSelect }) => {
+  // Implementation...
+  return <div>{/* Tree items */}</div>;
+};`,
+        usage: `import { TreeView, TreeNode } from '@/components/TreeView';
+import { Folder, FileCode, CheckCircle, Image as ImageIcon } from 'lucide-react';
+
+const treeData: TreeNode[] = [
+    {
+        id: '1',
+        label: 'src',
+        type: 'folder',
+        children: [
+            {
+                id: '2',
+                label: 'components',
+                type: 'folder',
+                children: [
+                    { id: '3', label: 'Button.tsx', type: 'file', icon: <FileCode className="w-4 h-4 text-blue-400" />, meta: '2KB' },
+                    { id: '4', label: 'Card.tsx', type: 'file', icon: <FileCode className="w-4 h-4 text-blue-400" />, meta: '4KB' },
+                ]
+            },
+            {
+                id: '5',
+                label: 'assets',
+                type: 'folder',
+                children: [
+                    { id: '6', label: 'logo.png', type: 'file', icon: <ImageIcon className="w-4 h-4 text-purple-400" />, meta: '15KB' },
+                ]
+            }
+        ]
+    },
+    {
+        id: '7',
+        label: 'package.json',
+        type: 'file',
+        icon: <FileCode className="w-4 h-4 text-yellow-500" />
+    }
+];
+
+export const FileTreeDemo = () => (
+    <div className="w-full max-w-sm">
+        <TreeView 
+            data={treeData} 
+            defaultExpanded={['1', '2']} 
+            onSelect={(node) => console.log('Selected:', node.label)} 
+        />
+    </div>
+);`
     }
 };

@@ -22,9 +22,10 @@ import { FileUploadZone } from '../components/FileUploadZone';
 import { Calendar as CalendarComponent } from '../components/Calendar';
 import { StatCard } from '../components/StatCard';
 import { NeonLineChart, GlassBarChart, HoloPieChart } from '../components/Charts';
+import { TreeView } from '../components/TreeView';
 import { DataTable } from '../components/DataTable';
 import { ComparisonTable } from '../components/ComparisonTable';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, FileCode, Image as ImageIcon } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { Introduction } from '../components/docs/Introduction';
@@ -759,6 +760,48 @@ export const ComponentPage = () => {
                                                             { name: 'Tablet', value: 100 },
                                                             { name: 'Other', value: 50 },
                                                         ]}
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {activeId === 'tree-view' && (
+                                                <div className="w-full max-w-sm mx-auto p-4">
+                                                    <h3 className="text-lg font-semibold text-white mb-4">File Explorer</h3>
+                                                    <TreeView
+                                                        data={[
+                                                            {
+                                                                id: '1',
+                                                                label: 'src',
+                                                                type: 'folder',
+                                                                children: [
+                                                                    {
+                                                                        id: '2',
+                                                                        label: 'components',
+                                                                        type: 'folder',
+                                                                        children: [
+                                                                            { id: '3', label: 'Button.tsx', type: 'file', icon: <FileCode className="w-4 h-4 text-blue-400" />, meta: '2KB' },
+                                                                            { id: '4', label: 'Card.tsx', type: 'file', icon: <FileCode className="w-4 h-4 text-blue-400" />, meta: '4KB' },
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        id: '5',
+                                                                        label: 'assets',
+                                                                        type: 'folder',
+                                                                        children: [
+                                                                            { id: '6', label: 'logo.png', type: 'file', icon: <ImageIcon className="w-4 h-4 text-purple-400" />, meta: '15KB' },
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                id: '7',
+                                                                label: 'package.json',
+                                                                type: 'file',
+                                                                icon: <FileCode className="w-4 h-4 text-yellow-500" />
+                                                            }
+                                                        ]}
+                                                        defaultExpanded={['1', '2']}
+                                                        onSelect={(node) => console.log('Selected:', node.label)}
                                                     />
                                                 </div>
                                             )}
