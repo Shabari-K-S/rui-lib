@@ -17,6 +17,7 @@ import { ParticlesBackground } from '../components/ParticlesBackground';
 import { MorphingTabs } from '../components/MorphingTabs';
 import { SpotlightEffect, SpotlightCard } from '../components/SpotlightEffect';
 import { WormholePortal } from '../components/WormholePortal';
+import { LiquidGradientMesh } from '../components/LiquidGradientMesh';
 import { Timeline } from '../components/Timeline';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { FileUploadZone } from '../components/FileUploadZone';
@@ -541,6 +542,27 @@ export const ComponentPage = () => {
                                                             </p>
                                                         </div>
                                                     </WormholePortal>
+                                                </div>
+                                            )}
+
+                                            {activeId === 'liquid-gradient-mesh' && (
+                                                <div className="w-full h-[400px] sm:h-[500px] lg:h-[600px] relative overflow-hidden rounded-xl border border-white/10">
+                                                    <LiquidGradientMesh
+                                                        colors={['#83f65cff', '#c5dbffff', '#000000ff', '#ebd71bff']}
+                                                        speed={1.5}
+                                                        complexity={14}
+                                                        blur={20}
+                                                        interactive
+                                                    >
+                                                        <div className="flex flex-col items-center justify-center h-full pointer-events-none p-4 text-center">
+                                                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+                                                                Liquid Gradients
+                                                            </h2>
+                                                            <p className="text-base sm:text-lg text-gray-300 drop-shadow-md">
+                                                                Move your mouse to interact with the blobs
+                                                            </p>
+                                                        </div>
+                                                    </LiquidGradientMesh>
                                                 </div>
                                             )}
 

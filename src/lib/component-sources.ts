@@ -28,6 +28,7 @@ import EmptyStateSource from '../components/EmptyState.tsx?raw';
 import StepperSource from '../components/Stepper.tsx?raw';
 import ConfettiSource from '../components/Confetti.tsx?raw';
 import MegaMenuSource from '../components/MegaMenu.tsx?raw';
+import LiquidGradientMeshSource from '../components/LiquidGradientMesh.tsx?raw';
 
 // Map component IDs to their full source code
 export const COMPONENT_SOURCES: Record<string, string> = {
@@ -58,4 +59,5 @@ export const COMPONENT_SOURCES: Record<string, string> = {
     'stepper': StepperSource,
     'confetti': ConfettiSource,
     'mega-menu': MegaMenuSource,
+    'liquid-gradient-mesh': LiquidGradientMeshSource,
 };
