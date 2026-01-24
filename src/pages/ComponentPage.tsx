@@ -26,6 +26,7 @@ import { TreeView } from '../components/TreeView';
 import { useToast } from '../components/Toast';
 import { Skeleton, SkeletonCard, SkeletonProfile, SkeletonRow } from '../components/Skeleton';
 import { EmptyState } from '../components/EmptyState';
+import { Stepper } from '../components/Stepper';
 import { DataTable } from '../components/DataTable';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { Menu, X, FileCode, Image as ImageIcon } from 'lucide-react';
@@ -41,7 +42,26 @@ export const ComponentPage = () => {
     const activeId = ignore || 'glass-card';
     const component = COMPONENTS[activeId];
 
-    // Allow special docs pages
+    // Stepper Demo State
+    const [stepperValue, setStepperValue] = useState(0);
+    const [verticalStepperValue, setVerticalStepperValue] = useState(2);
+    const [isStepperPlaying, setIsStepperPlaying] = useState(false);
+
+    useEffect(() => {
+        let interval: any;
+        if (isStepperPlaying) {
+            interval = setInterval(() => {
+                setStepperValue((prev) => {
+                    if (prev >= 3) {
+                        setIsStepperPlaying(false);
+                        return 0;
+                    }
+                    return prev + 1;
+                });
+            }, 1500);
+        }
+        return () => clearInterval(interval);
+    }, [isStepperPlaying]);
     const isDocsPage = ['introduction', 'installation'].includes(activeId);
 
     const [activeDockApp, setActiveDockApp] = useState('home');
@@ -917,6 +937,79 @@ export const ComponentPage = () => {
                                                         title="Empty Folder"
                                                         description="This folder does not contain any files yet."
                                                     />
+                                                </div>
+                                            )}
+
+                                            {activeId === 'stepper' && (
+                                                <div className="flex flex-col gap-12 w-full max-w-4xl mx-auto p-4">
+                                                    {/* Horizontal Stepper Demo */}
+                                                    <div className="space-y-6">
+                                                        <h3 className="text-lg font-semibold text-white">Horizontal Stepper</h3>
+                                                        <div className="p-8 border border-white/5 rounded-2xl bg-black/20 backdrop-blur-sm space-y-8 relative overflow-hidden">
+                                                            <div className="absolute top-4 right-4 z-20">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setStepperValue(0);
+                                                                        setIsStepperPlaying(true);
+                                                                    }}
+                                                                    className="px-3 py-1 bg-accent/20 text-accent text-xs font-medium rounded-full hover:bg-accent/30 transition-colors"
+                                                                >
+                                                                    {isStepperPlaying ? 'Playing...' : 'Play Demo ▶'}
+                                                                </button>
+                                                            </div>
+                                                            <Stepper
+                                                                currentStep={stepperValue}
+                                                                onStepClick={setStepperValue}
+                                                                steps={[
+                                                                    { id: '1', label: 'Personal Info', description: 'Enter details' },
+                                                                    { id: '2', label: 'Account Info', description: 'Setup account' },
+                                                                    { id: '3', label: 'Review', description: 'Confirm details' },
+                                                                    { id: '4', label: 'Complete', description: 'Success' },
+                                                                ]}
+                                                            />
+
+                                                            {/* Animated Content */}
+                                                            <div className="bg-white/5 rounded-xl p-8 min-h-[200px] flex items-center justify-center border border-white/5">
+                                                                <AnimatePresence mode="wait">
+                                                                    <motion.div
+                                                                        key={stepperValue}
+                                                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                                                                        transition={{ duration: 0.3 }}
+                                                                        className="text-center"
+                                                                    >
+                                                                        <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
+                                                                            <span className="text-2xl font-bold text-accent">{stepperValue + 1}</span>
+                                                                        </div>
+                                                                        <h4 className="text-xl font-bold text-white mb-2">
+                                                                            {['Personal Info', 'Account Info', 'Review', 'Complete'][stepperValue]}
+                                                                        </h4>
+                                                                        <p className="text-gray-400 max-w-sm">
+                                                                            {['Please enter your personal details to get started.', 'Setup your account preferences and security.', 'Review your information before submitting.', 'Registration complete! Welcome aboard.'][stepperValue]}
+                                                                        </p>
+                                                                    </motion.div>
+                                                                </AnimatePresence>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-6">
+                                                        <h3 className="text-lg font-semibold text-white">Vertical Stepper</h3>
+                                                        <div className="p-8 border border-white/5 rounded-2xl bg-black/20 backdrop-blur-sm">
+                                                            <Stepper
+                                                                orientation="vertical"
+                                                                currentStep={verticalStepperValue}
+                                                                onStepClick={setVerticalStepperValue}
+                                                                steps={[
+                                                                    { id: '1', label: 'Order Placed', description: 'We have received your order.' },
+                                                                    { id: '2', label: 'Processing', description: 'Your order is being prepared.' },
+                                                                    { id: '3', label: 'Shipped', description: 'Order has been shipped.', status: 'error' },
+                                                                    { id: '4', label: 'Delivered', description: 'Enjoy your product.' },
+                                                                ]}
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>

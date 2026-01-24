@@ -2722,5 +2722,67 @@ export const EmptyStateDemo = () => (
   title="Something went wrong"
   description="Please try again later"
 />`
+    },
+    'stepper': {
+        id: 'stepper',
+        name: 'Progress Stepper',
+        description: 'Multi-step progress indicator with support for horizontal/vertical layouts and current/completed/error states.',
+        dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
+        category: 'Components',
+        code: `import { Stepper, Step } from '@/components/Stepper';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const steps: Step[] = [
+    { id: '1', label: 'Personal Info', description: 'Enter details' },
+    { id: '2', label: 'Account Info', description: 'Setup account' },
+    { id: '3', label: 'Review', description: 'Confirm details' },
+    { id: '4', label: 'Complete', description: 'Success' },
+];
+
+export const StepperDemo = () => {
+    const [current, setCurrent] = React.useState(0);
+
+    return (
+        <div className="space-y-8">
+            <Stepper 
+                steps={steps} 
+                currentStep={current} 
+                onStepClick={setCurrent} 
+            />
+
+             {/* Content Animation */}
+             <div className="bg-white/5 rounded-xl p-8 border border-white/5">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={current}
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-center"
+                    >
+                        <h4 className="text-xl font-bold text-white mb-2">
+                            {steps[current].label}
+                        </h4>
+                        <p className="text-gray-400">
+                             Step {current + 1} Content
+                        </p>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+        </div>
+    );
+};`,
+        usage: `import { Stepper } from '@/components/Stepper';
+
+// Horizontal
+<Stepper steps={steps} currentStep={1} />
+
+// Vertical
+<Stepper 
+    steps={steps} 
+    currentStep={1} 
+    orientation="vertical" 
+/>`
     }
 };
