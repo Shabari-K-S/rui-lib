@@ -8,6 +8,7 @@ import { XRayReveal } from '../components/XRayReveal';
 import { MagneticButton } from '../components/MagneticButton';
 import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy, Users, DollarSign, ShoppingCart, Activity } from 'lucide-react';
 import { COMPONENTS } from '../lib/component-data';
+import { COMPONENT_SOURCES } from '../lib/component-sources';
 import { CodeBlock } from '../components/CodeBlock';
 import { cn } from '../lib/utils';
 import { AnimatedWall } from '../components/AnimatedWall';
@@ -28,6 +29,7 @@ import { Skeleton, SkeletonCard, SkeletonProfile, SkeletonRow } from '../compone
 import { EmptyState } from '../components/EmptyState';
 import { triggerConfetti } from '../components/Confetti';
 import { Stepper } from '../components/Stepper';
+import { MegaMenu } from '../components/MegaMenu';
 import { DataTable } from '../components/DataTable';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { Menu, X, FileCode, Image as ImageIcon } from 'lucide-react';
@@ -1071,6 +1073,98 @@ export const ComponentPage = () => {
                                                     </div>
                                                 </div>
                                             )}
+
+                                            {activeId === 'mega-menu' && (
+                                                <div className="w-full min-h-[460px] pt-8 pb-[350px] space-y-8">
+                                                    <div className="flex pl-10">
+                                                        <MegaMenu
+                                                            sections={[
+                                                                {
+                                                                    id: 'products',
+                                                                    label: 'Products',
+                                                                    categories: [
+                                                                        {
+                                                                            id: 'components',
+                                                                            title: 'Components',
+                                                                            items: [
+                                                                                { id: '1', label: 'Glass Card', icon: Folder, description: 'Beautiful glassmorphism cards with blur effects' },
+                                                                                { id: '2', label: 'Spotlight Effect', icon: Zap, description: 'Interactive spotlight following cursor', badge: 'New' },
+                                                                                { id: '3', label: 'Timeline', icon: Activity, description: 'Visualize events in chronological order' },
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            id: 'animations',
+                                                                            title: 'Animations',
+                                                                            items: [
+                                                                                { id: '4', label: 'Confetti', icon: Star, description: 'Celebration particle effects' },
+                                                                                { id: '5', label: 'Aurora Background', icon: Code, description: 'Animated gradient backgrounds' },
+                                                                                { id: '6', label: 'Particles', icon: Rocket, description: 'Interactive particle systems' },
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    featured: {
+                                                                        id: 'featured-1',
+                                                                        title: 'Getting Started',
+                                                                        description: 'Learn how to integrate our components into your project',
+                                                                        image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=200&fit=crop'
+                                                                    }
+                                                                },
+                                                                {
+                                                                    id: 'solutions',
+                                                                    label: 'Solutions',
+                                                                    categories: [
+                                                                        {
+                                                                            id: 'business',
+                                                                            title: 'For Business',
+                                                                            items: [
+                                                                                { id: '7', label: 'Dashboard Kit', icon: Activity, description: 'Pre-built analytics dashboards' },
+                                                                                { id: '8', label: 'E-commerce', icon: ShoppingCart, description: 'Online store components' },
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            id: 'developers',
+                                                                            title: 'For Developers',
+                                                                            items: [
+                                                                                { id: '9', label: 'API Tools', icon: Code, description: 'Developer-focused utilities' },
+                                                                                { id: '10', label: 'Templates', icon: Folder, description: 'Ready-to-use project templates', badge: 'Popular' },
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    id: 'resources',
+                                                                    label: 'Resources',
+                                                                    categories: [
+                                                                        {
+                                                                            id: 'learn',
+                                                                            title: 'Learn',
+                                                                            items: [
+                                                                                { id: '11', label: 'Documentation', icon: Folder, description: 'Complete API reference' },
+                                                                                { id: '12', label: 'Tutorials', icon: Rocket, description: 'Step-by-step guides' },
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            id: 'community',
+                                                                            title: 'Community',
+                                                                            items: [
+                                                                                { id: '13', label: 'Discord', icon: Users, description: 'Join our community channel' },
+                                                                                { id: '14', label: 'GitHub', icon: Code, description: 'Source code and issues' },
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    featured: {
+                                                                        id: 'featured-2',
+                                                                        title: 'Component Showcase',
+                                                                        description: 'Browse our full collection of UI components',
+                                                                        image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&h=200&fit=crop'
+                                                                    }
+                                                                }
+                                                            ]}
+                                                            trigger="hover"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -1091,8 +1185,9 @@ export const ComponentPage = () => {
 
                                 <section id="code" className="scroll-mt-24 mb-16 space-y-8">
                                     <h3 className="text-2xl font-bold text-white mb-4">Source Code</h3>
+                                    <p className="text-gray-400 text-sm mb-4">Copy this complete component and paste it into your project.</p>
                                     <CodeBlock
-                                        code={component.code}
+                                        code={COMPONENT_SOURCES[activeId] || component.code}
                                         language="tsx"
                                         maxHeight="600px"
                                         showLineNumbers={true}

@@ -2813,5 +2813,97 @@ triggerConfetti({
   origin: { y: 0.6 },
   colors: ['#bb0000', '#ffffff']
 });`
+    },
+    'mega-menu': {
+        id: 'mega-menu',
+        name: 'Mega Menu',
+        description: 'A sophisticated navigation menu with multi-column layouts, category headers, featured items with images, and full keyboard navigation.',
+        dependencies: 'npm install framer-motion lucide-react',
+        category: 'Components',
+        code: `import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, type LucideIcon } from 'lucide-react';
+
+export interface MegaMenuItem {
+  id: string;
+  label: string;
+  href?: string;
+  icon?: LucideIcon;
+  description?: string;
+  badge?: string;
+  onClick?: () => void;
+}
+
+export interface MegaMenuCategory {
+  id: string;
+  title: string;
+  items: MegaMenuItem[];
+}
+
+export interface MegaMenuFeatured {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  href?: string;
+  onClick?: () => void;
+}
+
+export interface MegaMenuSection {
+  id: string;
+  label: string;
+  categories: MegaMenuCategory[];
+  featured?: MegaMenuFeatured;
+}
+
+export interface MegaMenuProps {
+  sections: MegaMenuSection[];
+  trigger?: 'hover' | 'click';
+  className?: string;
+}
+
+export const MegaMenu: React.FC<MegaMenuProps> = ({
+  sections,
+  trigger = 'hover',
+  className = '',
+}) => {
+  // Full implementation in source code
+  return <nav>...</nav>;
+};`,
+        usage: `import { MegaMenu, MegaMenuSection } from '@/components/MegaMenu';
+import { Layers, Zap, Sparkles, Code, Rocket } from 'lucide-react';
+
+const menuSections: MegaMenuSection[] = [
+  {
+    id: 'products',
+    label: 'Products',
+    categories: [
+      {
+        id: 'components',
+        title: 'Components',
+        items: [
+          { id: '1', label: 'Glass Card', icon: Layers, description: 'Beautiful glassmorphism cards' },
+          { id: '2', label: 'Spotlight', icon: Zap, description: 'Interactive spotlight effects', badge: 'New' },
+        ]
+      },
+      {
+        id: 'animations',
+        title: 'Animations',
+        items: [
+          { id: '3', label: 'Confetti', icon: Sparkles, description: 'Celebration effects' },
+          { id: '4', label: 'Aurora', icon: Code, description: 'Background gradients' },
+        ]
+      }
+    ],
+    featured: {
+      id: 'featured-1',
+      title: 'Getting Started Guide',
+      description: 'Learn how to use our components',
+      image: '/featured-image.png'
+    }
+  }
+];
+
+<MegaMenu sections={menuSections} trigger="hover" />`
     }
 };
