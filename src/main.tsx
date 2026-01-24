@@ -5,12 +5,16 @@ import './index.css'
 import App from './App.tsx'
 import { NexusProvider } from './lib/nexus-provider'
 
+import { ToastProvider } from './components/Toast'
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <NexusProvider>
-        <App />
-      </NexusProvider>
+      <ToastProvider>
+        <NexusProvider>
+          <App />
+        </NexusProvider>
+      </ToastProvider>
     </BrowserRouter>
   </StrictMode>,
 )

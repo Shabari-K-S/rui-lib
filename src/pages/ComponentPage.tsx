@@ -23,6 +23,8 @@ import { Calendar as CalendarComponent } from '../components/Calendar';
 import { StatCard } from '../components/StatCard';
 import { NeonLineChart, GlassBarChart, HoloPieChart } from '../components/Charts';
 import { TreeView } from '../components/TreeView';
+import { useToast } from '../components/Toast';
+import { Skeleton, SkeletonCard, SkeletonProfile, SkeletonRow } from '../components/Skeleton';
 import { DataTable } from '../components/DataTable';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { Menu, X, FileCode, Image as ImageIcon } from 'lucide-react';
@@ -32,6 +34,7 @@ import { Introduction } from '../components/docs/Introduction';
 import { Installation } from '../components/docs/Installation';
 
 export const ComponentPage = () => {
+    const { toast } = useToast();
     const { ignore } = useParams();
     const navigate = useNavigate();
     const activeId = ignore || 'glass-card';
@@ -803,6 +806,84 @@ export const ComponentPage = () => {
                                                         defaultExpanded={['1', '2']}
                                                         onSelect={(node) => console.log('Selected:', node.label)}
                                                     />
+                                                </div>
+                                            )}
+
+                                            {activeId === 'toasts' && (
+                                                <div className="flex flex-col gap-4 w-full max-w-sm mx-auto p-4">
+                                                    <button
+                                                        onClick={() => toast({
+                                                            title: "Success",
+                                                            description: "Your changes have been saved successfully.",
+                                                            type: "success"
+                                                        })}
+                                                        className="w-full py-3 px-4 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 rounded-xl text-green-400 font-medium transition-all"
+                                                    >
+                                                        Trigger Success
+                                                    </button>
+                                                    <button
+                                                        onClick={() => toast({
+                                                            title: "Error",
+                                                            description: "Something went wrong. Please try again.",
+                                                            type: "error"
+                                                        })}
+                                                        className="w-full py-3 px-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-xl text-red-400 font-medium transition-all"
+                                                    >
+                                                        Trigger Error
+                                                    </button>
+                                                    <button
+                                                        onClick={() => toast({
+                                                            title: "Warning",
+                                                            description: "Your account is approaching the limit.",
+                                                            type: "warning"
+                                                        })}
+                                                        className="w-full py-3 px-4 bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/20 rounded-xl text-yellow-400 font-medium transition-all"
+                                                    >
+                                                        Trigger Warning
+                                                    </button>
+                                                    <button
+                                                        onClick={() => toast({
+                                                            title: "Info",
+                                                            description: "New update available.",
+                                                            type: "info",
+                                                            action: {
+                                                                label: "Update",
+                                                                onClick: () => console.log('Update clicked')
+                                                            }
+                                                        })}
+                                                        className="w-full py-3 px-4 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 rounded-xl text-blue-400 font-medium transition-all"
+                                                    >
+                                                        Trigger Info with Action
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {activeId === 'skeleton' && (
+                                                <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto p-4">
+                                                    <div className="space-y-4">
+                                                        <h3 className="text-lg font-semibold text-white">Primitives</h3>
+                                                        <div className="flex items-center gap-4">
+                                                            <Skeleton variant="circular" width={48} height={48} />
+                                                            <Skeleton variant="rectangular" width={120} height={48} className="rounded-lg" />
+                                                            <div className="flex-1 space-y-2">
+                                                                <Skeleton variant="text" width="100%" />
+                                                                <Skeleton variant="text" width="80%" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-4">
+                                                        <h3 className="text-lg font-semibold text-white">Presets</h3>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                            <SkeletonProfile />
+                                                            <SkeletonCard />
+                                                        </div>
+                                                        <div className="border border-white/5 rounded-xl overflow-hidden bg-black/20">
+                                                            <SkeletonRow />
+                                                            <SkeletonRow />
+                                                            <SkeletonRow />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>

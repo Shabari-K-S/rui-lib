@@ -2621,5 +2621,65 @@ export const FileTreeDemo = () => (
         />
     </div>
 );`
+    },
+    'toasts': {
+        id: 'toasts',
+        name: 'Toast Notifications',
+        description: 'Global notification system with context API, stackable queuing, and multiple variants.',
+        dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
+        category: 'Components',
+        code: `import { useToast } from '@/components/Toast';
+
+export const ToastDemo = () => {
+  const { toast } = useToast();
+
+  return (
+    <button
+      onClick={() => toast({
+        title: "Success",
+        description: "Your changes have been saved.",
+        type: "success"
+      })}
+    >
+      Show Toast
+    </button>
+  );
+};`,
+        usage: `import { ToastProvider } from '@/components/Toast';
+
+// Wrap your app root
+<ToastProvider>
+  <App />
+</ToastProvider>
+
+// Use in components
+const { toast } = useToast();
+toast({ title: "Hello", description: "World" });`
+    },
+    'skeleton': {
+        id: 'skeleton',
+        name: 'Skeleton Loader',
+        description: 'Animated placeholder elements that mimic the layout of content while it is loading.',
+        dependencies: 'npm install clsx tailwind-merge',
+        category: 'Components',
+        code: `import { Skeleton } from '@/components/Skeleton';
+
+export const SkeletonDemo = () => (
+  <div className="space-y-4">
+    <Skeleton className="h-12 w-12 rounded-full" />
+    <Skeleton className="h-4 w-[250px]" />
+    <Skeleton className="h-4 w-[200px]" />
+  </div>
+);`,
+        usage: `import { Skeleton, SkeletonCard, SkeletonProfile } from '@/components/Skeleton';
+
+// Primitives
+<Skeleton variant="circular" width={40} height={40} />
+<Skeleton variant="text" width="100%" />
+<Skeleton variant="rectangular" className="h-32 w-full" />
+
+// Presets
+<SkeletonProfile />
+<SkeletonCard />`
     }
 };
