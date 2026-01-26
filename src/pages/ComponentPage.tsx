@@ -6,7 +6,7 @@ import { GlassCard } from '../components/GlassCard';
 import { SmartBreadcrumb } from '../components/SmartBreadcrumb';
 import { XRayReveal } from '../components/XRayReveal';
 import { MagneticButton } from '../components/MagneticButton';
-import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy, Users, DollarSign, ShoppingCart, Activity } from 'lucide-react';
+import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy, Users, DollarSign, ShoppingCart, Activity, Info } from 'lucide-react';
 import { COMPONENTS } from '../lib/component-data';
 import { COMPONENT_SOURCES } from '../lib/component-sources';
 import { CodeBlock } from '../components/CodeBlock';
@@ -1290,6 +1290,34 @@ export const ComponentPage = () => {
                                         <p className="text-gray-400">Install dependencies:</p>
                                         <CodeBlock code={component.dependencies} language="bash" />
                                     </div>
+
+                                    {/* Required Hooks Notice */}
+                                    {component.requiredHooks && component.requiredHooks.length > 0 && (
+                                        <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 flex items-start gap-3">
+                                            <Info className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                                            <div className="space-y-2">
+                                                <p className="text-purple-200/90 text-sm font-medium">
+                                                    This component requires custom hooks
+                                                </p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {component.requiredHooks.map((hook) => (
+                                                        <code key={hook} className="text-xs px-2 py-1 bg-purple-500/20 rounded text-purple-300 font-mono">
+                                                            {hook}
+                                                        </code>
+                                                    ))}
+                                                </div>
+                                                <p className="text-purple-200/70 text-sm">
+                                                    Get these hooks from the{' '}
+                                                    <Link
+                                                        to="/components/installation"
+                                                        className="text-purple-400 hover:text-purple-300 underline underline-offset-2"
+                                                    >
+                                                        Installation page → Required Hooks
+                                                    </Link>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </section>
 
                                 <section id="usage" className="scroll-mt-24 mb-16 space-y-8">

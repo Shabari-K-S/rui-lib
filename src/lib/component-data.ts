@@ -5,6 +5,7 @@ export interface ComponentData {
     dependencies: string; // npm install command
     usage: string; // Usage example
     category?: 'Text & Typography' | 'Cards & Containers' | 'Navigation' | 'Data Display' | 'Inputs & Forms' | 'Feedback & Overlays' | 'Interactive Effects' | 'Backgrounds';
+    requiredHooks?: string[]; // Custom hooks required by the component
 }
 
 export const COMPONENTS: Record<string, ComponentData> = {
@@ -312,6 +313,7 @@ export const SpotlightDemo = () => {
         description: 'An infinite tunnel effect with particle acceleration and gravitational lensing. Creates a mesmerizing spacetime distortion visualization.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
         category: 'Backgrounds',
+        requiredHooks: ['useReducedMotion', 'useCanvas', 'useAnimationFrame'],
         usage: `import { WormholePortal } from '@/components/WormholePortal';
 
 export const HeroSection = () => {
@@ -915,6 +917,7 @@ const menuSections: MegaMenuSection[] = [
         description: 'GPU-accelerated fluid gradient background with organic blob morphing, mouse interactivity, and smooth color blending.',
         dependencies: 'npm install clsx tailwind-merge',
         category: 'Backgrounds',
+        requiredHooks: ['useReducedMotion'],
         usage: 'import { LiquidGradientMesh } from \'@/components/LiquidGradientMesh\';\n\nexport const HeroSection = () => (\n    <div className=\"h-screen w-full\">\n        <LiquidGradientMesh\n            colors={[\'#8B5CF6\', \'#3B82F6\', \'#EC4899\', \'#10B981\']}\n            speed={1}\n            complexity={3}\n            blur={60}\n            interactive\n        >\n            <div className=\"flex items-center justify-center h-full\">\n                <h1 className=\"text-white text-6xl font-bold\">Welcome</h1>\n            </div>\n        </LiquidGradientMesh>\n    </div>\n);'
     },
     'digital-matrix': {
@@ -923,6 +926,7 @@ const menuSections: MegaMenuSection[] = [
         description: 'Animated matrix-style background with random characters, wave distortion, and scanlines inspired by Midjourney.',
         dependencies: 'npm install clsx tailwind-merge',
         category: 'Backgrounds',
+        requiredHooks: ['useReducedMotion'],
         usage: 'import { DigitalMatrix } from \'@/components/DigitalMatrix\';\n\nexport const HeroSection = () => (\n    <div className=\"h-screen w-full\">\n        <DigitalMatrix\n            color=\"#4a9eff\"\n            secondaryColor=\"#7c3aed\"\n            density={0.65}\n            speed={0.8}\n            wave={true}\n            scanlineOpacity={0.15}\n        >\n            <div className=\"flex items-center justify-center h-full\">\n                <h1 className=\"text-white text-6xl font-bold\">Welcome</h1>\n            </div>\n        </DigitalMatrix>\n    </div>\n);'
     },
     'masked-text': {
