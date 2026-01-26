@@ -30,21 +30,23 @@ import ConfettiSource from '../components/Confetti.tsx?raw';
 import MegaMenuSource from '../components/MegaMenu.tsx?raw';
 import LiquidGradientMeshSource from '../components/LiquidGradientMesh.tsx?raw';
 import HolographicFoilSource from '../components/DigitalMatrix.tsx?raw';
+import MaskedTextSource from '../components/MaskedText.tsx?raw';
 
 // Map component IDs to their full source code
+// IDs must match those in component-data.ts
 export const COMPONENT_SOURCES: Record<string, string> = {
     'glass-card': GlassCardSource,
-    'interactive-dock': InteractiveDockSource,
-    'smart-breadcrumb': SmartBreadcrumbSource,
-    'xray-reveal': XRayRevealSource,
+    'dock': InteractiveDockSource,
+    'breadcrumb': SmartBreadcrumbSource,
+    'x-ray-reveal': XRayRevealSource,
     'magnetic-button': MagneticButtonSource,
-    'animated-wall': AnimatedWallSource,
+    'cyber-grid': AnimatedWallSource,
     'aurora-background': AuroraBackgroundSource,
     'particles-background': ParticlesBackgroundSource,
     'morphing-tabs': MorphingTabsSource,
-    'spotlight-card': SpotlightEffectSource,
+    'spotlight-effect': SpotlightEffectSource,
     'wormhole-portal': WormholePortalSource,
-    'teleport-search': TeleportSearchSource,
+    'teleport': TeleportSearchSource,
     'timeline': TimelineSource,
     'kanban-board': KanbanBoardSource,
     'file-upload': FileUploadZoneSource,
@@ -62,4 +64,6 @@ export const COMPONENT_SOURCES: Record<string, string> = {
     'mega-menu': MegaMenuSource,
     'liquid-gradient-mesh': LiquidGradientMeshSource,
     'digital-matrix': HolographicFoilSource,
+    'masked-text': MaskedTextSource,
 };
+

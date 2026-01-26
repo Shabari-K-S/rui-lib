@@ -1301,7 +1301,7 @@ export const ComponentPage = () => {
                                     <h3 className="text-2xl font-bold text-white mb-4">Source Code</h3>
                                     <p className="text-gray-400 text-sm mb-4">Copy this complete component and paste it into your project.</p>
                                     <CodeBlock
-                                        code={COMPONENT_SOURCES[activeId] || component.code}
+                                        code={COMPONENT_SOURCES[activeId] || ''}
                                         language="tsx"
                                         maxHeight="600px"
                                         showLineNumbers={true}
