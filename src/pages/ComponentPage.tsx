@@ -19,6 +19,7 @@ import { SpotlightEffect, SpotlightCard } from '../components/SpotlightEffect';
 import { WormholePortal } from '../components/WormholePortal';
 import { LiquidGradientMesh } from '../components/LiquidGradientMesh';
 import { DigitalMatrix } from '../components/DigitalMatrix';
+import MaskedText from '../components/MaskedText';
 import { Timeline } from '../components/Timeline';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { FileUploadZone } from '../components/FileUploadZone';
@@ -163,7 +164,7 @@ export const ComponentPage = () => {
                                         </li>
                                     </ul>
                                 </div>
-                                {['Components', 'Backgrounds'].map((category) => (
+                                {['Text & Typography', 'Cards & Containers', 'Navigation', 'Data Display', 'Inputs & Forms', 'Feedback & Overlays', 'Interactive Effects', 'Backgrounds'].map((category) => (
                                     <div key={category}>
                                         <h4 className="text-sm font-semibold text-white mb-3">{category}</h4>
                                         <ul className="space-y-1 border-l border-white/5">
@@ -239,7 +240,7 @@ export const ComponentPage = () => {
                             </ul>
                         </div>
 
-                        {['Components', 'Backgrounds'].map((category) => (
+                        {['Text & Typography', 'Cards & Containers', 'Navigation', 'Data Display', 'Inputs & Forms', 'Feedback & Overlays', 'Interactive Effects', 'Backgrounds'].map((category) => (
                             <div key={category}>
                                 <h4 className="text-sm font-semibold text-white mb-3">{category}</h4>
                                 <ul className="space-y-1">
@@ -1207,6 +1208,73 @@ export const ComponentPage = () => {
                                                             ]}
                                                             trigger="hover"
                                                         />
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {activeId === 'masked-text' && (
+                                                <div className="flex flex-col items-center justify-center gap-8 p-8 w-full">
+                                                    <div className="space-y-8 text-center">
+                                                        {/* Default settings */}
+                                                        <div className="space-y-2">
+                                                            <p className="text-xs text-gray-500 uppercase tracking-wider">Default</p>
+                                                            <div className="text-3xl font-bold">
+                                                                <MaskedText>Hello World</MaskedText>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Fast animation with quick stagger */}
+                                                        <div className="space-y-2">
+                                                            <p className="text-xs text-gray-500 uppercase tracking-wider">Fast Animation</p>
+                                                            <div className="text-3xl font-bold">
+                                                                <MaskedText
+                                                                    duration={0.3}
+                                                                    staggerDelay={0.02}
+                                                                >
+                                                                    Fast Animation
+                                                                </MaskedText>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Slow, dramatic effect */}
+                                                        <div className="space-y-2">
+                                                            <p className="text-xs text-gray-500 uppercase tracking-wider">Slow Bounce</p>
+                                                            <div className="text-3xl font-bold">
+                                                                <MaskedText
+                                                                    duration={1}
+                                                                    staggerDelay={0.1}
+                                                                    hoverColor="#ff6b6b"
+                                                                    easing="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+                                                                >
+                                                                    Slow Bounce
+                                                                </MaskedText>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Custom color and easing */}
+                                                        <div className="space-y-2">
+                                                            <p className="text-xs text-gray-500 uppercase tracking-wider">Custom Style</p>
+                                                            <div className="text-4xl font-bold">
+                                                                <MaskedText
+                                                                    duration={0.6}
+                                                                    staggerDelay={0.03}
+                                                                    hoverColor="#00d4ff"
+                                                                    easing="ease-out"
+                                                                >
+                                                                    Custom Style
+                                                                </MaskedText>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* No delay (all letters move together) */}
+                                                        <div className="space-y-2">
+                                                            <p className="text-xs text-gray-500 uppercase tracking-wider">Link</p>
+                                                            <div className="text-3xl font-bold">
+                                                                <MaskedText className='cursor-pointer' onClick={() => window.open('https://github.com/Shabari-K-S', '_blank')}>
+                                                                    Github Profile
+                                                                </MaskedText>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             )}

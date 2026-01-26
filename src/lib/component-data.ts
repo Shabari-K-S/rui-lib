@@ -5,7 +5,7 @@ export interface ComponentData {
     dependencies: string; // npm install command
     code: string; // The source code
     usage: string; // Usage example
-    category?: 'Components' | 'Backgrounds';
+    category?: 'Text & Typography' | 'Cards & Containers' | 'Navigation' | 'Data Display' | 'Inputs & Forms' | 'Feedback & Overlays' | 'Interactive Effects' | 'Backgrounds';
 }
 
 export const COMPONENTS: Record<string, ComponentData> = {
@@ -14,7 +14,7 @@ export const COMPONENTS: Record<string, ComponentData> = {
         name: 'Glass Card',
         description: 'A high-fidelity glass surface with magnetic 3D tilt effect on hover.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
-        category: 'Components',
+        category: 'Cards & Containers',
         code: `import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -122,7 +122,7 @@ export const MyCard = () => (
         name: 'Interactive Dock',
         description: 'A macOS-inspired dock with magnification physics and glassmorphism.',
         dependencies: 'npm install framer-motion @radix-ui/react-tooltip clsx tailwind-merge',
-        category: 'Components',
+        category: 'Navigation',
         code: `import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { cn } from "../lib/utils";
@@ -250,7 +250,7 @@ export const MyDock = () => (
         name: 'Smart Breadcrumb',
         description: 'Context-aware navigation trail with dropdown menus.',
         dependencies: 'npm install @radix-ui/react-dropdown-menu clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Navigation',
         code: `import { ChevronRight, ChevronDown, Folder } from 'lucide-react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { cn } from '../lib/utils';
@@ -343,7 +343,7 @@ export const SmartBreadcrumb = ({ items, onNavigate, className }: SmartBreadcrum
         name: 'Teleport Search',
         description: 'Global command palette for fast navigation and actions.',
         dependencies: 'npm install cmdk framer-motion lucide-react',
-        category: 'Components',
+        category: 'Inputs & Forms',
         code: `import { useState, useEffect } from 'react';
 import { Command } from 'cmdk';
 import { useNexus } from '../lib/nexus-provider';
@@ -456,7 +456,7 @@ export const TeleportSearch = ({ searchGroups }: { searchGroups: SearchGroup[] }
         name: 'X-Ray Reveal',
         description: 'A magical effect where a cursor-guided mask reveals hidden content layer underneath.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
-        category: 'Components',
+        category: 'Interactive Effects',
         code: `import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -567,7 +567,7 @@ export const SecretDossier = () => (
         name: 'Magnetic Button',
         description: 'A button that physically attracts to your cursor when you get close.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
-        category: 'Components',
+        category: 'Interactive Effects',
         code: `import React, { useRef } from 'react';
 import { motion, useSpring } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -940,7 +940,7 @@ export const HeroSection = () => (
         name: 'Morphing Tabs',
         description: 'Animated tab navigation with smooth morphing indicator that flows between tabs.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
-        category: 'Components',
+        category: 'Navigation',
         code: `import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -1115,7 +1115,7 @@ export const TabVariants = () => {
         name: 'Spotlight Effect',
         description: 'A mouse-following spotlight glow effect that dynamically highlights content as the cursor moves.',
         dependencies: 'npm install framer-motion clsx tailwind-merge',
-        category: 'Components',
+        category: 'Cards & Containers',
         code: `import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -1410,7 +1410,7 @@ export const HeroSection = () => {
         name: 'Timeline',
         description: 'A beautiful timeline component for displaying events, milestones, or project progress with scroll-reveal animations.',
         dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Data Display',
         code: `import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -1620,7 +1620,7 @@ export const ProjectTimeline = () => (
         name: 'Kanban Board',
         description: 'A drag-and-drop task board with columns, cards, filtering, sorting, and WIP limits.',
         dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Data Display',
         code: `import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -1834,7 +1834,7 @@ export const TaskBoard = () => (
         name: 'File Upload Zone',
         description: 'Advanced file uploader with drag-and-drop, preview thumbnails, progress bars, and paste support.',
         dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Inputs & Forms',
         code: `import React, { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -1934,7 +1934,7 @@ export const UploadDemo = () => (
         name: 'Calendar',
         description: 'Full-featured calendar with month view, date selection, range picking, and event markers.',
         dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Data Display',
         code: `import React, { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -2018,7 +2018,7 @@ export const CalendarDemo = () => {
         name: 'Stats & Metrics',
         description: 'Versatile statistic cards with trends, sparklines, and animated counters. Supports multiple layout variants.',
         dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Cards & Containers',
         code: `import React, { useEffect, useMemo, useRef } from 'react';
 import { motion, useSpring, useTransform, useInView } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -2100,7 +2100,7 @@ export const StatsDemo = () => (
         name: 'Advanced Data Table',
         description: 'Feature-rich data table with sorting, filtering, selection, pagination, and CSV export.',
         dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Data Display',
         code: `import React, { useState, useMemo } from 'react';
 import { 
   ChevronDown, 
@@ -2306,7 +2306,7 @@ export const DataTableDemo = () => (
         name: 'Comparison Table',
         description: 'Pricing and feature comparison table with sticky headers, recommended plan highlighting, and check/cross indicators.',
         dependencies: 'npm install framer-motion clsx tailwind-merge lucide-react',
-        category: 'Components',
+        category: 'Data Display',
         code: `import React, { useState } from 'react';
 import { Check, X, Info, HelpCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -2480,7 +2480,7 @@ export const PricingDemo = () => (
         name: 'Neon Charts',
         description: 'High-performance charts with unique neon glows, glassmorphism effects, and custom animations.',
         dependencies: 'npm install recharts framer-motion clsx tailwind-merge',
-        category: 'Components',
+        category: 'Data Display',
         code: `import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -2558,7 +2558,7 @@ export const ChartsDemo = () => (
         name: 'Tree View',
         description: 'Hierarchical list component with expandable nodes, custom icons, and smooth animations.',
         dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
-        category: 'Components',
+        category: 'Data Display',
         code: `import React, { useState } from 'react';
 import { ChevronRight, Folder, FolderOpen, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -2627,7 +2627,7 @@ export const FileTreeDemo = () => (
         name: 'Toast Notifications',
         description: 'Global notification system with context API, stackable queuing, and multiple variants.',
         dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
-        category: 'Components',
+        category: 'Feedback & Overlays',
         code: `import { useToast } from '@/components/Toast';
 
 export const ToastDemo = () => {
@@ -2661,7 +2661,7 @@ toast({ title: "Hello", description: "World" });`
         name: 'Skeleton Loader',
         description: 'Animated placeholder elements that mimic the layout of content while it is loading.',
         dependencies: 'npm install clsx tailwind-merge',
-        category: 'Components',
+        category: 'Feedback & Overlays',
         code: `import { Skeleton } from '@/components/Skeleton';
 
 export const SkeletonDemo = () => (
@@ -2687,7 +2687,7 @@ export const SkeletonDemo = () => (
         name: 'Empty State',
         description: 'Placeholder illustrations for empty data sets, errors, or search results.',
         dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
-        category: 'Components',
+        category: 'Feedback & Overlays',
         code: `import { EmptyState } from '@/components/EmptyState';
 
 export const EmptyStateDemo = () => (
@@ -2728,7 +2728,7 @@ export const EmptyStateDemo = () => (
         name: 'Progress Stepper',
         description: 'Multi-step progress indicator with support for horizontal/vertical layouts and current/completed/error states.',
         dependencies: 'npm install framer-motion lucide-react clsx tailwind-merge',
-        category: 'Components',
+        category: 'Feedback & Overlays',
         code: `import { Stepper, Step } from '@/components/Stepper';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -2790,7 +2790,7 @@ export const StepperDemo = () => {
         name: 'Confetti',
         description: 'High-performance canvas-based confetti explosion effect.',
         dependencies: 'No external dependencies',
-        category: 'Components',
+        category: 'Feedback & Overlays',
         code: `import { triggerConfetti } from '@/components/Confetti';
 
 export const ConfettiDemo = () => (
@@ -2819,7 +2819,7 @@ triggerConfetti({
         name: 'Mega Menu',
         description: 'A sophisticated navigation menu with multi-column layouts, category headers, featured items with images, and full keyboard navigation.',
         dependencies: 'npm install framer-motion lucide-react',
-        category: 'Components',
+        category: 'Navigation',
         code: `import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, type LucideIcon } from 'lucide-react';
@@ -2923,5 +2923,146 @@ const menuSections: MegaMenuSection[] = [
         category: 'Backgrounds',
         code: '// See full implementation in src/components/DigitalMatrix.tsx',
         usage: 'import { DigitalMatrix } from \'@/components/DigitalMatrix\';\n\nexport const HeroSection = () => (\n    <div className=\"h-screen w-full\">\n        <DigitalMatrix\n            color=\"#4a9eff\"\n            secondaryColor=\"#7c3aed\"\n            density={0.65}\n            speed={0.8}\n            wave={true}\n            scanlineOpacity={0.15}\n        >\n            <div className=\"flex items-center justify-center h-full\">\n                <h1 className=\"text-white text-6xl font-bold\">Welcome</h1>\n            </div>\n        </DigitalMatrix>\n    </div>\n);'
+    },
+    'masked-text': {
+        id: 'masked-text',
+        name: 'Masked Text',
+        description: 'An animated text component with a hover-triggered letter reveal effect. Each letter slides up with customizable stagger delay, duration, easing, and hover color.',
+        dependencies: 'No external dependencies (React only)',
+        category: 'Text & Typography',
+        code: `import { useEffect, useRef } from 'react';
+
+interface MaskedTextProps {
+    children: string;
+    className?: string;
+    /** Duration of the animation in seconds (default: 0.5) */
+    duration?: number;
+    /** Delay between each letter in seconds (default: 0.05) */
+    staggerDelay?: number;
+    /** Color on hover (default: #c6c885) */
+    hoverColor?: string;
+    /** Easing function (default: ease-in-out) */
+    easing?: string;
+}
+
+const MaskedText = ({
+    children,
+    className = '',
+    duration = 0.5,
+    staggerDelay = 0.05,
+    hoverColor = '#c6c885',
+    easing = 'ease-in-out'
+}: MaskedTextProps) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const letters = Array.from(children);
+        const wrappedLetters = letters
+            .map((letter) =>
+                \`<span class="letter">
+                    <span class="top">\${letter === ' ' ? '&nbsp;' : letter}</span>
+                    <span class="bottom">\${letter === ' ' ? '&nbsp;' : letter}</span>
+                </span>\`
+            )
+            .join('');
+
+        containerRef.current.innerHTML = wrappedLetters;
+
+        const letterElements = containerRef.current.querySelectorAll('.letter');
+        letterElements.forEach((el, index) => {
+            (el as HTMLElement).style.transitionDelay = \`\${index * staggerDelay}s\`;
+        });
+    }, [children, staggerDelay]);
+
+    return (
+        <>
+            <div
+                ref={containerRef}
+                className={\`inline-block overflow-hidden text-container \${className}\`}
+                style={{
+                    ['--duration' as string]: \`\${duration}s\`,
+                    ['--hover-color' as string]: hoverColor,
+                    ['--easing' as string]: easing,
+                }}
+            />
+            <style>{\`
+                .text-container {
+                    display: inline-block;
+                    overflow: hidden;
+                }
+
+                .letter {
+                    display: inline-block;
+                    position: relative;
+                    transition: transform var(--duration) var(--easing), color 0.2s var(--easing);
+                    transform: translateY(var(--y, 0));
+                }
+
+                .text-container:hover .letter {
+                    --y: -100%;
+                    color: var(--hover-color);
+                }
+
+                .letter .top,
+                .letter .bottom {
+                    display: inline-block;
+                }
+
+                .letter .bottom {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    transform: translateY(100%);
+                }
+            \`}</style>
+        </>
+    );
+};
+
+export default MaskedText;`,
+        usage: `import MaskedText from '@/components/MaskedText';
+
+// Default settings
+<MaskedText>Hello World</MaskedText>
+
+// Fast animation with quick stagger
+<MaskedText 
+    duration={0.3} 
+    staggerDelay={0.02}
+>
+    Fast Animation
+</MaskedText>
+
+// Slow, dramatic effect with bounce easing
+<MaskedText 
+    duration={1} 
+    staggerDelay={0.1}
+    hoverColor="#ff6b6b"
+    easing="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+>
+    Slow Bounce
+</MaskedText>
+
+// Custom color and easing
+<MaskedText 
+    duration={0.6} 
+    staggerDelay={0.03}
+    hoverColor="#00d4ff"
+    easing="ease-out"
+    className="text-4xl font-bold"
+>
+    Custom Style
+</MaskedText>
+
+// No delay (all letters move together)
+<MaskedText 
+    duration={0.4} 
+    staggerDelay={0}
+    hoverColor="#9b59b6"
+>
+    Synchronized
+</MaskedText>`
     }
 };
