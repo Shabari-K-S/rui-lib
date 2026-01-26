@@ -6,7 +6,7 @@ import { GlassCard } from '../components/GlassCard';
 import { SmartBreadcrumb } from '../components/SmartBreadcrumb';
 import { XRayReveal } from '../components/XRayReveal';
 import { MagneticButton } from '../components/MagneticButton';
-import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, ChevronRight, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy, Users, DollarSign, ShoppingCart, Activity } from 'lucide-react';
+import { Home, Search, Calendar as CalendarIcon, Folder, MessageSquare, ArrowLeft, Zap, Settings, Skull, AlertTriangle, Lock, MousePointer2, Rocket, Code, Star, Trophy, Users, DollarSign, ShoppingCart, Activity } from 'lucide-react';
 import { COMPONENTS } from '../lib/component-data';
 import { COMPONENT_SOURCES } from '../lib/component-sources';
 import { CodeBlock } from '../components/CodeBlock';
@@ -103,7 +103,7 @@ export const ComponentPage = () => {
 
 
     return (
-        <div className="h-screen pt-24 overflow-hidden relative">
+        <div className="h-screen pt-16 overflow-hidden bg-background-dark">
             {/* Mobile Navigation Drawer */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
@@ -114,7 +114,7 @@ export const ComponentPage = () => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm lg:hidden"
+                            className="fixed inset-0 z-[60] bg-background-dark/80 backdrop-blur-sm lg:hidden"
                         />
                         {/* Drawer */}
                         <motion.aside
@@ -122,27 +122,27 @@ export const ComponentPage = () => {
                             animate={{ x: 0 }}
                             exit={{ x: '-100%' }}
                             transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-                            className="fixed inset-y-0 left-0 z-[70] w-64 bg-black/60 backdrop-blur-xl border-r border-white/10 p-6 lg:hidden overflow-y-auto scrollbar-hide"
+                            className="fixed inset-y-0 left-0 z-[70] w-72 bg-surface-dark border-r border-border p-6 lg:hidden overflow-y-auto scrollbar-hide"
                         >
                             <div className="flex items-center justify-between mb-8">
-                                <span className="text-sm font-semibold text-white">Navigation</span>
+                                <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">Navigation</span>
                                 <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-500 hover:text-white">
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
-                            <div className="space-y-6">
+                            <div className="space-y-8">
                                 <div>
-                                    <h4 className="text-sm font-semibold text-white mb-3">Getting Started</h4>
+                                    <h4 className="text-xs font-semibold uppercase tracking-wider text-text-muted mb-4 px-3">Getting Started</h4>
                                     <ul className="space-y-1">
                                         <li>
                                             <Link
                                                 to="/components/introduction"
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                                 className={cn(
-                                                    "block text-sm py-1.5 pl-4 -ml-px border-l transition-colors cursor-pointer",
+                                                    "block text-sm py-1.5 px-3 border-l-2 -ml-px transition-colors cursor-pointer",
                                                     activeId === 'introduction'
-                                                        ? "border-accent text-accent font-medium"
-                                                        : "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-700"
+                                                        ? "border-accent text-accent font-medium bg-accent-dim"
+                                                        : "border-transparent text-text-secondary hover:text-text-primary hover:border-border"
                                                 )}
                                             >
                                                 Introduction
@@ -153,10 +153,10 @@ export const ComponentPage = () => {
                                                 to="/components/installation"
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                                 className={cn(
-                                                    "block text-sm py-1.5 pl-4 -ml-px border-l transition-colors cursor-pointer",
+                                                    "block text-sm py-1.5 px-3 border-l-2 -ml-px transition-colors cursor-pointer",
                                                     activeId === 'installation'
-                                                        ? "border-accent text-accent font-medium"
-                                                        : "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-700"
+                                                        ? "border-accent text-accent font-medium bg-accent-dim"
+                                                        : "border-transparent text-text-secondary hover:text-text-primary hover:border-border"
                                                 )}
                                             >
                                                 Installation
@@ -166,8 +166,8 @@ export const ComponentPage = () => {
                                 </div>
                                 {['Text & Typography', 'Cards & Containers', 'Navigation', 'Data Display', 'Inputs & Forms', 'Feedback & Overlays', 'Interactive Effects', 'Backgrounds'].map((category) => (
                                     <div key={category}>
-                                        <h4 className="text-sm font-semibold text-white mb-3">{category}</h4>
-                                        <ul className="space-y-1 border-l border-white/5">
+                                        <h4 className="text-xs font-semibold uppercase tracking-wider text-text-muted mb-4 px-3">{category}</h4>
+                                        <ul className="space-y-1 border-l border-border-muted">
                                             {Object.values(COMPONENTS)
                                                 .filter(c => (c.category || 'Components') === category)
                                                 .map((item) => (
@@ -175,10 +175,10 @@ export const ComponentPage = () => {
                                                         <Link
                                                             to={`/components/${item.id}`}
                                                             className={cn(
-                                                                "block text-sm py-1.5 pl-4 -ml-px border-l transition-colors",
+                                                                "block text-sm py-1.5 px-3 border-l-2 -ml-px transition-colors",
                                                                 activeId === item.id
-                                                                    ? "border-accent text-accent font-medium"
-                                                                    : "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-700"
+                                                                    ? "border-accent text-accent font-medium bg-accent-dim"
+                                                                    : "border-transparent text-text-secondary hover:text-text-primary hover:border-border"
                                                             )}
                                                         >
                                                             {item.name}
@@ -194,31 +194,31 @@ export const ComponentPage = () => {
                 )}
             </AnimatePresence>
 
-            <div className="max-w-[1400px] mx-auto flex gap-6 lg:gap-10 px-4 sm:px-6 lg:px-8 h-full relative z-10">
+            <div className="max-w-[1600px] mx-auto flex gap-0 h-full relative z-10">
 
                 {/* Left Sidebar - Navigation */}
-                <aside className="w-64 flex-shrink-0 hidden lg:block h-full overflow-y-auto pr-8 pb-12 scrollbar-hide border-r border-white/5">
-                    <div className="mb-4">
+                <aside className="w-64 flex-shrink-0 hidden lg:block h-full overflow-y-auto py-8 px-4 scrollbar-hide border-r border-border">
+                    <div className="mb-6">
                         <Link
                             to="/"
-                            className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors"
+                            className="flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors"
                         >
                             <ArrowLeft className="w-4 h-4" />
                             Back to Home
                         </Link>
                     </div>
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                         <div>
-                            <h4 className="text-sm font-semibold text-white mb-3">Getting Started</h4>
-                            <ul className="space-y-1">
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-text-muted mb-4">Getting Started</h4>
+                            <ul className="space-y-1 border-l border-border-muted">
                                 <li>
                                     <Link
                                         to="/components/introduction"
                                         className={cn(
-                                            "block text-sm px-3 py-2 rounded-lg transition-colors cursor-pointer",
+                                            "block text-sm py-1.5 px-3 border-l-2 -ml-px transition-colors cursor-pointer",
                                             activeId === 'introduction'
-                                                ? "bg-accent/10 text-accent font-medium"
-                                                : "text-gray-400 hover:text-white hover:bg-white/5"
+                                                ? "border-accent text-accent font-medium"
+                                                : "border-transparent text-text-secondary hover:text-text-primary hover:border-border"
                                         )}
                                     >
                                         Introduction
@@ -228,10 +228,10 @@ export const ComponentPage = () => {
                                     <Link
                                         to="/components/installation"
                                         className={cn(
-                                            "block text-sm px-3 py-2 rounded-lg transition-colors cursor-pointer",
+                                            "block text-sm py-1.5 px-3 border-l-2 -ml-px transition-colors cursor-pointer",
                                             activeId === 'installation'
-                                                ? "bg-accent/10 text-accent font-medium"
-                                                : "text-gray-400 hover:text-white hover:bg-white/5"
+                                                ? "border-accent text-accent font-medium"
+                                                : "border-transparent text-text-secondary hover:text-text-primary hover:border-border"
                                         )}
                                     >
                                         Installation
@@ -242,8 +242,8 @@ export const ComponentPage = () => {
 
                         {['Text & Typography', 'Cards & Containers', 'Navigation', 'Data Display', 'Inputs & Forms', 'Feedback & Overlays', 'Interactive Effects', 'Backgrounds'].map((category) => (
                             <div key={category}>
-                                <h4 className="text-sm font-semibold text-white mb-3">{category}</h4>
-                                <ul className="space-y-1">
+                                <h4 className="text-xs font-semibold uppercase tracking-wider text-text-muted mb-4">{category}</h4>
+                                <ul className="space-y-1 border-l border-border-muted">
                                     {Object.values(COMPONENTS)
                                         .filter(c => (c.category || 'Components') === category)
                                         .map((item) => (
@@ -251,10 +251,10 @@ export const ComponentPage = () => {
                                                 <Link
                                                     to={`/components/${item.id}`}
                                                     className={cn(
-                                                        "block text-sm px-3 py-2 rounded-lg transition-colors",
+                                                        "block text-sm py-1.5 px-3 border-l-2 -ml-px transition-colors",
                                                         activeId === item.id
-                                                            ? "bg-accent/10 text-accent font-medium"
-                                                            : "text-gray-400 hover:text-white hover:bg-white/5"
+                                                            ? "border-accent text-accent font-medium"
+                                                            : "border-transparent text-text-secondary hover:text-text-primary hover:border-border"
                                                     )}
                                                 >
                                                     {item.name}
@@ -268,14 +268,14 @@ export const ComponentPage = () => {
                 </aside>
 
                 {/* Main Content */}
-                <main className="flex-1 min-w-0 h-full overflow-y-auto pb-12 scrollbar-hide">
+                <main className="flex-1 min-w-0 h-full overflow-y-auto px-8 py-8 scrollbar-hide">
                     {isDocsPage ? (
-                        <div className="max-w-3xl">
+                        <div className="max-w-3xl mx-auto">
                             {/* Mobile Menu Button */}
                             <div className="lg:hidden mb-6 flex items-center justify-between">
                                 <button
                                     onClick={() => setIsMobileMenuOpen(true)}
-                                    className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-white/5 -ml-3"
+                                    className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors px-3 py-2 rounded-lg hover:bg-surface-dark -ml-3"
                                 >
                                     <Menu className="w-5 h-5" />
                                     <span className="text-sm font-medium">Menu</span>
@@ -286,26 +286,24 @@ export const ComponentPage = () => {
                             {activeId === 'installation' && <Installation />}
                         </div>
                     ) : (
-                        <div className="max-w-3xl">
+                        <div className="max-w-3xl mx-auto">
                             {/* Mobile Components Header */}
                             <div className="lg:hidden mb-6 flex items-center justify-between">
                                 <button
                                     onClick={() => setIsMobileMenuOpen(true)}
-                                    className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-white/5 -ml-3"
+                                    className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors px-3 py-2 rounded-lg hover:bg-surface-dark -ml-3"
                                 >
                                     <Menu className="w-5 h-5" />
                                     <span className="text-sm font-medium">Menu</span>
                                 </button>
                             </div>
 
-                            <div className="mb-6">
-                                <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                                    <span>Components</span>
-                                    <ChevronRight className="w-4 h-4" />
-                                    <span className="text-white font-medium">{component.name}</span>
-                                </div>
-                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight mb-4">{component.name}</h1>
-                                <p className="text-base sm:text-lg text-gray-400 leading-relaxed">
+                            <div className="mb-10">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-text-muted mb-3">
+                                    {component.category || 'Components'}
+                                </p>
+                                <h1 className="text-3xl font-semibold tracking-tight text-text-primary mb-4">{component.name}</h1>
+                                <p className="text-base text-text-secondary leading-relaxed">
                                     {component.description}
                                 </p>
                             </div>
@@ -317,11 +315,14 @@ export const ComponentPage = () => {
                                 {/* Preview Tab */}
                                 <section id="preview" className="scroll-mt-24 mb-16 space-y-8">
                                     <div className="space-y-8">
-                                        <div className="rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl overflow-hidden min-h-[300px] sm:min-h-[400px] flex items-center justify-center relative">
+                                        <div className={cn(
+                                            "rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl min-h-[300px] sm:min-h-[400px] flex items-center justify-center relative",
+                                            activeId === 'dock' ? "overflow-visible" : "overflow-hidden"
+                                        )}>
 
                                             {/* Specific Render Logic */}
                                             {activeId === 'dock' && (
-                                                <div className="mt-auto pb-10 w-full overflow-x-auto px-4 flex justify-center scrollbar-hide">
+                                                <div className="mt-auto pb-14 pt-12 w-full overflow-visible px-4 flex justify-center">
                                                     <Dock>
                                                         <DockIcon label="Home" isActive={activeDockApp === 'home'} onClick={() => setActiveDockApp('home')}><Home /></DockIcon>
                                                         <DockIcon label="Search" isActive={activeDockApp === 'search'} onClick={() => setActiveDockApp('search')}><Search /></DockIcon>
@@ -1316,14 +1317,14 @@ export const ComponentPage = () => {
                 {/* Right Sidebar - On this page */}
                 {
                     !isDocsPage && (
-                        <aside className="w-64 flex-shrink-0 hidden xl:block h-full overflow-y-auto pb-12">
-                            <h5 className="text-sm font-semibold text-white mb-4">On This Page</h5>
-                            <ul className="space-y-2 text-sm">
+                        <aside className="w-56 flex-shrink-0 hidden xl:block h-full overflow-y-auto py-8 pl-8 border-l border-border">
+                            <h5 className="text-xs font-semibold uppercase tracking-wider text-text-muted mb-4">On This Page</h5>
+                            <ul className="space-y-2 text-sm border-l border-border-muted">
                                 {sections.map(section => (
                                     <li key={section.id}>
                                         <a
                                             href={`#${section.id}`}
-                                            className="block text-left text-gray-500 hover:text-white transition-colors"
+                                            className="block text-left pl-3 py-1 border-l-2 -ml-px border-transparent text-text-secondary hover:text-text-primary hover:border-accent transition-colors"
                                         >
                                             {section.label}
                                         </a>
