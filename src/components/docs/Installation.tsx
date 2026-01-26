@@ -24,16 +24,16 @@ const HookCard = ({
     };
 
     return (
-        <div className="border border-white/10 rounded-xl overflow-hidden bg-white/[0.02]">
+        <div className="border border-border rounded-xl overflow-hidden bg-card">
             <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+                className="w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors"
             >
                 <div className="flex items-center gap-3">
-                    <code className="text-accent font-mono text-sm bg-accent/10 px-2 py-1 rounded">{name}</code>
-                    <span className="text-gray-400 text-sm hidden sm:block">{description}</span>
+                    <code className="text-primary font-mono text-sm bg-primary/10 px-2 py-1 rounded">{name}</code>
+                    <span className="text-muted-foreground text-sm hidden sm:block">{description}</span>
                 </div>
-                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
             </button>
 
             <AnimatePresence>
@@ -45,13 +45,13 @@ const HookCard = ({
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden"
                     >
-                        <div className="border-t border-white/10">
-                            <div className="p-4 bg-white/[0.02] border-b border-white/5">
-                                <p className="text-gray-400 text-sm mb-2">{description}</p>
+                        <div className="border-t border-border">
+                            <div className="p-4 bg-muted/30 border-b border-border">
+                                <p className="text-muted-foreground text-sm mb-2">{description}</p>
                                 <div className="flex flex-wrap gap-2">
-                                    <span className="text-xs text-gray-500">Used by:</span>
+                                    <span className="text-xs text-muted-foreground">Used by:</span>
                                     {usedBy.map((component) => (
-                                        <span key={component} className="text-xs px-2 py-0.5 bg-white/10 rounded text-gray-300">
+                                        <span key={component} className="text-xs px-2 py-0.5 bg-secondary rounded text-foreground">
                                             {component}
                                         </span>
                                     ))}
@@ -230,7 +230,7 @@ export const useAnimationFrame = (callback: (deltaTime: number) => void, isPause
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-4xl md:text-5xl font-bold tracking-tight text-white"
+                    className="text-4xl md:text-5xl font-bold tracking-tight text-foreground"
                 >
                     Installation
                 </motion.h1>
@@ -238,7 +238,7 @@ export const useAnimationFrame = (callback: (deltaTime: number) => void, isPause
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="text-xl text-gray-400 leading-relaxed"
+                    className="text-xl text-muted-foreground leading-relaxed"
                 >
                     Get up and running with ReactUI in minutes. Follow these steps to prepare your environment.
                 </motion.p>
@@ -246,21 +246,21 @@ export const useAnimationFrame = (callback: (deltaTime: number) => void, isPause
 
             <div className="space-y-8">
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20">1</span>
+                    <h2 className="text-2xl font-semibold text-foreground flex items-center gap-3">
+                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-sm">1</span>
                         Prerequisites
                     </h2>
-                    <p className="text-gray-400">Ensure you have a React project set up with Tailwind CSS. We recommend Vite or Next.js.</p>
+                    <p className="text-muted-foreground">Ensure you have a React project set up with Tailwind CSS. We recommend Vite or Next.js.</p>
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20">2</span>
+                    <h2 className="text-2xl font-semibold text-foreground flex items-center gap-3">
+                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-sm">2</span>
                         Install Dependencies
                     </h2>
-                    <p className="text-gray-400">ReactUI relies on <code className="text-white bg-white/10 px-1.5 py-0.5 rounded">framer-motion</code> for animations and <code className="text-white bg-white/10 px-1.5 py-0.5 rounded">clsx</code> + <code className="text-white bg-white/10 px-1.5 py-0.5 rounded">tailwind-merge</code> for class handling.</p>
+                    <p className="text-muted-foreground">ReactUI relies on <code className="text-foreground bg-secondary px-1.5 py-0.5 rounded">framer-motion</code> for animations and <code className="text-foreground bg-secondary px-1.5 py-0.5 rounded">clsx</code> + <code className="text-foreground bg-secondary px-1.5 py-0.5 rounded">tailwind-merge</code> for class handling.</p>
 
-                    <div className="bg-black/40 border border-white/10 rounded-xl overflow-hidden">
+                    <div className="bg-[#09090b] border border-white/10 rounded-xl overflow-hidden shadow-sm">
                         <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
                             <div className="flex items-center gap-2 text-sm text-gray-400">
                                 <Terminal className="w-4 h-4" />
@@ -274,11 +274,11 @@ export const useAnimationFrame = (callback: (deltaTime: number) => void, isPause
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-400 text-sm border border-blue-500/20">3</span>
+                    <h2 className="text-2xl font-semibold text-foreground flex items-center gap-3">
+                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-sm">3</span>
                         Add Utilities
                     </h2>
-                    <p className="text-gray-400">Create a <code className="text-white bg-white/10 px-1.5 py-0.5 rounded">utils.ts</code> file in your project (usually under <code className="text-white bg-white/10 px-1.5 py-0.5 rounded">src/lib/utils.ts</code>) to handle class merging.</p>
+                    <p className="text-muted-foreground">Create a <code className="text-foreground bg-secondary px-1.5 py-0.5 rounded">utils.ts</code> file in your project (usually under <code className="text-foreground bg-secondary px-1.5 py-0.5 rounded">src/lib/utils.ts</code>) to handle class merging.</p>
 
                     <CodeBlock
                         language="typescript"
@@ -292,18 +292,18 @@ export function cn(...inputs: ClassValue[]) {
                 </section>
 
                 <section className="space-y-4" id="hooks">
-                    <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/10 text-purple-400 text-sm border border-purple-500/20">4</span>
+                    <h2 className="text-2xl font-semibold text-foreground flex items-center gap-3">
+                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/10 text-purple-500 border border-purple-500/20 text-sm">4</span>
                         Required Hooks
                     </h2>
-                    <p className="text-gray-400">
+                    <p className="text-muted-foreground">
                         Some components require custom hooks for canvas rendering, animation frames, and accessibility.
-                        Create these files in <code className="text-white bg-white/10 px-1.5 py-0.5 rounded">src/hooks/</code> directory.
+                        Create these files in <code className="text-foreground bg-secondary px-1.5 py-0.5 rounded">src/hooks/</code> directory.
                     </p>
 
-                    <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-start gap-3">
-                        <Info className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-                        <p className="text-amber-200/80 text-sm">
+                    <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-4 flex items-start gap-3">
+                        <Info className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                        <p className="text-amber-800 dark:text-amber-200/80 text-sm font-medium">
                             These hooks are only required for specific components. Check each component's documentation to see if any hooks are needed.
                         </p>
                     </div>
@@ -316,11 +316,11 @@ export function cn(...inputs: ClassValue[]) {
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 text-green-400 text-sm border border-green-500/20">5</span>
+                    <h2 className="text-2xl font-semibold text-foreground flex items-center gap-3">
+                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 text-green-500 border border-green-500/20 text-sm">5</span>
                         That's it!
                     </h2>
-                    <p className="text-gray-400">You are now ready to copy and paste components into your project. Browse the collection to get started.</p>
+                    <p className="text-muted-foreground">You are now ready to copy and paste components into your project. Browse the collection to get started.</p>
                 </section>
             </div>
         </div>
